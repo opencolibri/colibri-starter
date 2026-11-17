@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -92,6 +92,8 @@ when it qualifies.
 
 Options:
   --include-cart       Add the selected product and capture the cart page
+  --split-only         Only recompose the split homepages from the light and
+                       dark homepages already saved in the output directory
   --product <slug>     Use this product instead of discovering one
   --base-url <url>    Storefront base URL (default: ${defaultBaseUrl})
   --output-dir <dir>  Screenshot output directory (default: docs/images)
@@ -110,6 +112,7 @@ specific browser executable.`);
 function parseArguments(args) {
   let theme;
   let includeCart = false;
+  let splitOnly = false;
   let productSlug;
   let baseUrl = defaultBaseUrl;
   let outputDir = 'docs/images';
@@ -127,6 +130,11 @@ function parseArguments(args) {
 
     if (argument === '--include-cart') {
       includeCart = true;
+      continue;
+    }
+
+    if (argument === '--split-only') {
+      splitOnly = true;
       continue;
     }
 
@@ -197,7 +205,7 @@ function parseArguments(args) {
   }
   parsedBaseUrl.pathname = `${parsedBaseUrl.pathname.replace(/\/+$/, '')}/`;
 
-  return { theme, includeCart, productSlug, baseUrl: parsedBaseUrl, outputDir: resolve(outputDir), viewports, schemes };
+  return { theme, includeCart, splitOnly, productSlug, baseUrl: parsedBaseUrl, outputDir: resolve(outputDir), viewports, schemes };
 }
 
 function findChrome() {
@@ -266,7 +274,7 @@ async function waitForEvent(events, method) {
 }
 
 async function main() {
-  const { theme, includeCart, productSlug, baseUrl, outputDir, viewports, schemes } = parseArguments(process.argv.slice(2));
+  const { theme, includeCart, splitOnly, productSlug, baseUrl, outputDir, viewports, schemes } = parseArguments(process.argv.slice(2));
   const chrome = findChrome();
   if (!chrome) throw new Error('Could not find Chrome or Chromium; set CHROME_BIN to its executable');
 
@@ -417,8 +425,9 @@ async function main() {
     };
 
     // Saves the light screenshot's left half next to the dark screenshot's right half,
-    // split by a neutral line, so that both schemes show in a single thumbnail.
-    const composeSplit = async (light, dark, path) => {
+    // split by a divider, so that both schemes show in a single thumbnail. screenRatio is
+    // the viewport height over its width, to put the divider's handle on the first screen.
+    const composeSplit = async (light, dark, screenRatio, path) => {
       // A blank page: the storefront's Content Security Policy may block data: images.
       const loaded = waitForEvent(events, 'Page.loadEventFired');
       await send('Page.navigate', { url: 'about:blank' });
@@ -441,14 +450,74 @@ async function main() {
         const split = Math.round(width / 2);
         context.drawImage(light, 0, 0, split, height, 0, 0, split, height);
         context.drawImage(dark, split, 0, width - split, height, split, 0, width - split, height);
-        const line = Math.max(2, Math.round(width / 480));
-        context.fillStyle = '#808080';
-        context.fillRect(split - Math.floor(line / 2), 0, line, height);
+        // Sized from the page width so that it still reads on a thumbnail a tenth as wide:
+        // a white divider lifted by a soft shadow on both sides, with a round sun and moon
+        // handle at the middle of the first screen.
+        const line = Math.max(3, Math.round(width / 112));
+        context.save();
+        context.shadowColor = 'rgba(0, 0, 0, 0.45)';
+        context.shadowBlur = Math.round(width / 64);
+        context.fillStyle = '#ffffff';
+        context.fillRect(split - line / 2, 0, line, height);
+        const radius = Math.round(width / 28);
+        // The first screen is as high as the viewport, whatever the scale of the screenshot.
+        const handleY = Math.min(height - radius, Math.round(width * ${screenRatio} / 2));
+        context.beginPath();
+        context.arc(split, handleY, radius, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+        // The handle is split too: a sun on a white half, a moon on a night half.
+        const inner = radius - line;
+        context.fillStyle = '#1e2230';
+        context.beginPath();
+        context.arc(split, handleY, inner, -Math.PI / 2, Math.PI / 2);
+        context.fill();
+        const sunX = split - inner * 0.48;
+        context.fillStyle = context.strokeStyle = '#c56a00';
+        context.lineWidth = inner * 0.08;
+        context.lineCap = 'round';
+        context.beginPath();
+        context.arc(sunX, handleY, inner * 0.15, 0, Math.PI * 2);
+        context.fill();
+        for (let ray = 0; ray < 8; ray++) {
+          const angle = ray * Math.PI / 4;
+          context.beginPath();
+          context.moveTo(sunX + Math.cos(angle) * inner * 0.24, handleY + Math.sin(angle) * inner * 0.24);
+          context.lineTo(sunX + Math.cos(angle) * inner * 0.33, handleY + Math.sin(angle) * inner * 0.33);
+          context.stroke();
+        }
+        const moonX = split + inner * 0.46;
+        const moon = inner * 0.27;
+        // A crescent: a light disc, partly covered by a disc of the night half's color.
+        context.fillStyle = '#f4f1e8';
+        context.beginPath();
+        context.arc(moonX, handleY, moon, 0, Math.PI * 2);
+        context.fill();
+        context.fillStyle = '#1e2230';
+        context.beginPath();
+        context.arc(moonX + moon * 0.55, handleY - moon * 0.35, moon * 0.85, 0, Math.PI * 2);
+        context.fill();
         return canvas.toDataURL('image/webp', ${webpQuality / 100}).split(',')[1];
       })()`, { awaitPromise: true });
       writeFileSync(path, Buffer.from(data, 'base64'));
       console.log(`light + dark -> ${path}`);
     };
+
+    await send('Page.enable');
+    await send('Runtime.enable');
+
+    // Recomposes the split homepages from the light and dark screenshots already saved.
+    if (splitOnly) {
+      for (const next of viewports) {
+        const [light, dark] = colorSchemes.map(name => {
+          const path = join(outputDir, `${outputTheme}-homepage-${next.name}-${name}.webp`);
+          if (!existsSync(path)) throw new Error(`${path} is missing: capture the ${name} homepage first`);
+          return readFileSync(path).toString('base64');
+        });
+        await composeSplit(light, dark, next.height / next.width, join(outputDir, `${outputTheme}-homepage-${next.name}-split.webp`));
+      }
+      return;
+    }
 
     // Product links of the current page, as absolute URLs, without duplicates.
     const productLinksExpression = `[...new Set([...document.querySelectorAll('a[href]')]
@@ -478,9 +547,6 @@ async function main() {
         if (images.length === 0) reasons.push('no product image');
         return { url: ${JSON.stringify(productUrl)}, name, images: images.length, usable: reasons.length === 0, reason: reasons.join(', ') };
       })`, { awaitPromise: true });
-
-    await send('Page.enable');
-    await send('Runtime.enable');
 
     await useScheme(schemes[0]);
     await useViewport(viewports[0]);
@@ -556,6 +622,7 @@ async function main() {
         await composeSplit(
           homepages.get(`${next.name}-light`),
           homepages.get(`${next.name}-dark`),
+          next.height / next.width,
           join(outputDir, `${outputTheme}-homepage-${next.name}-split.webp`),
         );
       }

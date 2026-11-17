@@ -11,7 +11,10 @@ theme ships both [color schemes](../themes/color-schemes.md)), theme names with 
 (`retro-gaming-cart-mobile-dark.webp`). Each scheme is captured through the emulated system preference, the switcher
 staying in its **Auto** mode. When both schemes are captured, the homepage is also saved as
 `<theme>-homepage-<viewport>-split.webp`: the left half of the light page next to the right half of the dark page,
-split by a grey line, so that a single thumbnail shows both schemes.
+split by a white divider with a round handle, half sun and half moon, so that a single thumbnail shows both
+schemes. Run the script with `--split-only` to recompose them from the light and dark homepages already saved, without
+opening the storefront. The [theme overview](../themes/index.md) uses the
+`wide` one as thumbnail, the README the `normal` one.
 
 | Viewport | Size     | Purpose                                                                           |
 |----------|----------|-----------------------------------------------------------------------------------|
