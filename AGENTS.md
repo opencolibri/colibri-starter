@@ -39,7 +39,8 @@ touch), in both color schemes (`light` and `dark`, through the emulated system p
 screenshots in `docs/images/`, named `<theme>-<page>-<viewport>-<scheme>.webp` (for example
 `canvas-homepage-mobile-dark.webp`, pages `homepage`, `product` and `cart`); theme names use hyphens (`retro-gaming`).
 When both schemes are captured, it also saves `<theme>-homepage-<viewport>-split.webp`: the full light homepage on the
-left half, the dark one on the right half, to show both schemes in one thumbnail.
+left half, the dark one on the right half, to show both schemes in one thumbnail. `--split-only` recomposes them from
+the light and dark homepages already saved, without opening the storefront.
 Use `--color-schemes dark` to capture one scheme only, `--viewports normal,mobile` to capture some sizes only, or `--width <px>` / `--height <px>` for a single custom desktop
 viewport (saved with a `<width>x<height>` suffix). Use `--base-url <url>` to capture from another storefront URL, or
 `--output-dir <dir>` to choose another output directory. The default storefront is `https://app.test/en_US/` in the main checkout, and the worktree stack (see below) in a git worktree.
@@ -92,8 +93,8 @@ the first failure. Without `--restore`, the last captured theme stays active.
 The script hides the Symfony web debug toolbar, so the app can stay in the `dev` environment.
 
 Theme pages (`docs/themes/<theme>.md`) show one table per screen size (**Desktop**, **Wide screen**, **Mobile**), each
-with a **Light** and a **Dark** row of the homepage, product page and cart; the theme overview uses the `wide` light homepage
-as thumbnail, so full-width layouts stand out.
+with a **Light** and a **Dark** row of the homepage, product page and cart; the theme overview uses the `wide` split homepage
+(`<theme>-homepage-wide-split.webp`) as thumbnail, so full-width layouts and both schemes stand out.
 
 The script requires Node.js 22+ and Google Chrome or Chromium. Set `CHROME_BIN` if the browser executable is not detected automatically. The selected theme must be active on the storefront.
 
