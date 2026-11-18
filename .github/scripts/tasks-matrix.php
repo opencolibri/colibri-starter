@@ -132,6 +132,9 @@ $ignored = [
     'src/Upsun/',
     // The sales kit admin bundle is never installed in the test application.
     'src/SalesKit/',
+    // Theme thumbnails, for theme pickers: never installed in the app.
+    'src/Themes/previews/',
+    'src/Themes/src/ThemePreview.php',
 ];
 
 $startsWith = static function (string $file, array $prefixes): bool {
