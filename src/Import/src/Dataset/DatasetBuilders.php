@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace OpenColibri\Starter\Import\Dataset;
 
 /**
- * Sources a dataset can be built from (sylius:import:dataset:build --source=…). The import package registers "ai";
- * a project registers the others, e.g. "existing" with the fetch of an existing site.
+ * Sources a dataset can be built from (sylius:import:dataset:build --source=…). The import package registers "ai" and
+ * "existing" (the fetch of an existing site); a project can register others.
  *
  * A builder writes products.yaml and collections.yaml of the project slug it receives, like the shop import tasks:
  * it runs in an import context whose var dir is the datasets one.

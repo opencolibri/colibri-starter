@@ -25,6 +25,8 @@ final class ImportTasksTest extends TestCase
             ['export', 'sylius:import:dataset'],
             ['delete', 'sylius:import:dataset'],
             ['create', 'sylius:import:shop'],
+            ['fetch', 'sylius:import:existing'],
+            ['push', 'sylius:import:var'],
         ];
 
         $index = 0;

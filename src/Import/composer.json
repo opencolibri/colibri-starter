@@ -1,6 +1,6 @@
 {
     "name": "opencolibri/starter-import",
-    "description": "Castor tasks to import an existing shop catalog into Sylius, with optional AI enrichment",
+    "description": "Castor tasks to import an existing shop catalog into Sylius, by fetching its website or with AI enrichment",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -13,6 +13,10 @@
         {
             "name": "Loïc Frémont",
             "email": "lfremont@jolicode.com"
+        },
+        {
+            "name": "Jérôme Gangneux",
+            "email": "jerome@gangneux.net"
         }
     ],
     "require": {
