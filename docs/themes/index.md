@@ -11,7 +11,8 @@ install it with [`castor sylius:theme:setup`](../commands/themes.md). One theme 
 channel picks its own with the [theme-bundle target](../commands/themes.md#one-theme-per-channel).
 
 Every theme ships a light and a dark [color scheme](color-schemes.md): visitors pick **Auto** (their system
-setting), **Light** or **Dark** from the header.
+setting), **Light** or **Dark** from the header. The [header layout](header-layout.md) of every theme is yours to
+choose: the category menu in the logo row, on a row of its own or in a full-width band, with or without a search.
 
 ## General purpose
 

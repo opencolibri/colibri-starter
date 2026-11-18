@@ -15,6 +15,13 @@ If no argument is provided, an interactive prompt asks you to choose the theme.
 castor sylius:theme:setup canvas
 ```
 
+To choose where the header shows the category menu and the search (see [header layout](../themes/header-layout.md)):
+
+```bash
+castor sylius:theme:setup canvas --menu=below --search=inline
+castor sylius:theme:header --menu=bar          # change the layout of the installed theme
+```
+
 ## Available themes
 
 The [themes overview](../themes/index.md) shows every theme by category, with a preview. Use `default` to remove the
