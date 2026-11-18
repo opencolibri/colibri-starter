@@ -6,6 +6,7 @@ parameters:
         - src/Import/src
         - src/Menu/src
         - src/Plugins/src
+        - src/SalesKit/src
         - src/Themes/src
         - src/Upsun/src
         - .castor/monorepo

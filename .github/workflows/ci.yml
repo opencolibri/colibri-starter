@@ -7,7 +7,8 @@ name: Continuous Integration
           - "*.md"
           - "docs/**"
     pull_request:
-        branches: ["main"]
+        # sales-kit: the sales kit package is reviewed there, one pull request at a time, before going to main.
+        branches: ["main", "sales-kit"]
         paths-ignore:
           - "*.md"
           - "docs/**"
