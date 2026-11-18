@@ -40,6 +40,7 @@ existing Castor project.
 | [`castor sylius:menu:remove`](docs/commands/admin-menu.md)      | `opencolibri/starter-menu`    |
 | [`castor sylius:import:*`](docs/import/index.md)                | `opencolibri/starter-import`, `opencolibri/starter-datasets` |
 | [`castor sylius:upsun:*`](docs/commands/upsun.md)              | `opencolibri/starter-upsun`   |
+| [Sales kit admin](src/SalesKit/README.md) (Symfony bundle)     | `opencolibri/starter-sales-kit` |
 
 Every package relies on `opencolibri/starter-core`; `opencolibri/starter` installs them all. See
 [Packages](docs/getting-started/packages.md).

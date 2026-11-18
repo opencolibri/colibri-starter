@@ -14,7 +14,11 @@ sidebar:
 | [`opencolibri/starter-datasets`](https://github.com/opencolibri/starter-datasets) | `OpenColibri\Starter\Datasets` | [ready-made datasets](../import/datasets.md) for `sylius:import:shop:create` |
 | [`opencolibri/starter-import`](https://github.com/opencolibri/starter-import)   | `OpenColibri\Starter\Import`  | [`sylius:import:*`](../import/index.md)                               |
 | [`opencolibri/starter-upsun`](https://github.com/opencolibri/starter-upsun)     | `OpenColibri\Starter\Upsun`   | [`sylius:upsun:*`](../commands/upsun.md)                              |
+| [`opencolibri/starter-sales-kit`](https://github.com/opencolibri/starter-sales-kit) | `OpenColibri\Starter\SalesKit` | Symfony bundle: the sales kit admin (demo shops, datasets), on Sylius Shadcn Admin UI |
 | `opencolibri/starter`                                                      | —                       | All of the above                                                      |
 
 The core is the Castor plugin itself. Every other package only contributes tasks: it registers them in the core
 from a file autoloaded by Composer, so installing a package is enough to get its tasks on your `SyliusService`.
+
+`opencolibri/starter-sales-kit` is the exception: a Symfony bundle, installed in the admin app of a sales kit (it
+drives the import tasks through castor-api). See its [README](https://github.com/opencolibri/colibri-starter/blob/main/src/SalesKit/README.md).
