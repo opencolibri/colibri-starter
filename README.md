@@ -22,6 +22,9 @@ rm -rf .git && git init
 castor sylius:init
 ```
 
+Or click [**Use this template**](https://github.com/new?template_name=starter-skeleton&template_owner=opencolibri) to
+create your own GitHub repository from the skeleton, then clone it and run `castor sylius:init`.
+
 `castor sylius:init` asks a few questions (name, PHP version, domain, database, theme, payment gateways…), then builds
 and starts everything.
 
