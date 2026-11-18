@@ -24,8 +24,8 @@ rm -rf .git && git init
 castor sylius:init
 ```
 
-On GitHub, **Use this template** on the [skeleton repository](https://github.com/opencolibri/starter-skeleton) gives you a
-fresh repository without cloning the history.
+Or click [**Use this template**](https://github.com/new?template_name=starter-skeleton&template_owner=opencolibri) to
+create your own GitHub repository from the skeleton, without its history, then clone it and run `castor sylius:init`.
 
 `castor sylius:init` asks a few questions (application name, PHP version, domain, database, theme, payment
 gateways…), then builds and starts everything. Once done, it removes the skeleton-only files: the README is replaced by
