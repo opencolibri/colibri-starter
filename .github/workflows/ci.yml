@@ -156,8 +156,48 @@ jobs:
             -   id: packages
                 run: echo "packages=$(php .github/scripts/monorepo-matrix.php)" >> "$GITHUB_OUTPUT"
 
+    tasks-matrix:
+        name: Select the tasks
+        runs-on: ubuntu-latest
+        outputs:
+            tasks: ${{ steps.tasks.outputs.tasks }}
+        steps:
+            -   uses: actions/checkout@v6
+                with:
+                    # The pull request merge commit and its first parent (the base branch)
+                    fetch-depth: 2
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.4'
+                    coverage: none
+
+            # A pull request runs the tasks its changes affect, a push or the weekly run every task.
+            -   id: tasks
+                run: |
+                    if [ "${{ github.event_name }}" = "pull_request" ]; then
+                        tasks=$(git diff --name-only HEAD^1 HEAD | php .github/scripts/tasks-matrix.php 2> /tmp/reasons)
+                    else
+                        tasks=$(php .github/scripts/tasks-matrix.php --all 2> /tmp/reasons)
+                    fi
+                    echo "tasks=${tasks}" >> "$GITHUB_OUTPUT"
+                    {
+                        echo "### Tasks selected"
+                        echo
+                        echo "${tasks}" | php -r 'foreach (json_decode(stream_get_contents(STDIN)) as $t) echo "- {$t->name}\n";'
+                        echo
+                        echo "<details><summary>Why</summary>"
+                        echo
+                        echo '```'
+                        cat /tmp/reasons
+                        echo '```'
+                        echo "</details>"
+                    } >> "$GITHUB_STEP_SUMMARY"
+
     test-application:
         name: Build the test application
+        needs: tasks-matrix
+        if: needs.tasks-matrix.outputs.tasks != '[]'
         timeout-minutes: 30
         runs-on: ubuntu-latest
         steps:
@@ -207,82 +247,12 @@ jobs:
 
     tasks:
         name: ${{ matrix.command.name }}
-        needs: test-application
+        needs: [tasks-matrix, test-application]
         timeout-minutes: 20
         strategy:
             fail-fast: false
             matrix:
-                command:
-                    -   name: ALTCHA Plugin
-                        value: "castor sylius:add altcha && castor sylius:remove altcha"
-                    -   name: Google Recaptcha Plugin
-                        value: "castor sylius:add recaptcha && castor sylius:remove recaptcha"
-                    -   name: Sylius API
-                        value: "castor sylius:remove api"
-                    -   name: Symfony BugSnag Plugin
-                        value: "castor sylius:add bugsnag && castor sylius:remove bugsnag"
-                    -   name: Sylius CMS Plugin
-                        value: "castor sylius:add cms && castor sylius:remove cms"
-                    -   name: Synolia GDPR Plugin
-                        value: "castor sylius:add gdpr || true"
-                    -   name: Sylius Invoicing Plugin
-                        value: "castor sylius:add invoicing && castor sylius:remove invoicing"
-                    -   name: Sylius Refund Plugin
-                        value: "castor sylius:add refund"
-                    -   name: Sylius Product Bundle Plugin
-                        value: "castor sylius:add product_bundle"
-                    -   name: Sylius Wishlist Plugin
-                        value: "castor sylius:add wishlist && castor sylius:remove wishlist"
-                    -   name: Canvas theme
-                        value: "castor sylius:theme:setup canvas"
-                    -   name: Blush theme
-                        value: "castor sylius:theme:setup blush"
-                    -   name: Prompt theme
-                        value: "castor sylius:theme:setup prompt"
-                    -   name: Volt theme
-                        value: "castor sylius:theme:setup volt"
-                    -   name: Lagoon theme
-                        value: "castor sylius:theme:setup lagoon"
-                    -   name: Aurora theme
-                        value: "castor sylius:theme:setup aurora"
-                    -   name: Tech theme
-                        value: "castor sylius:theme:setup tech"
-                    -   name: Retro Gaming theme
-                        value: "castor sylius:theme:setup retro_gaming"
-                    -   name: Drive theme
-                        value: "castor sylius:theme:setup drive"
-                    -   name: Cellar theme
-                        value: "castor sylius:theme:setup cellar"
-                    -   name: Roastery theme
-                        value: "castor sylius:theme:setup roastery"
-                    -   name: Teahouse theme
-                        value: "castor sylius:theme:setup teahouse"
-                    -   name: Summit theme
-                        value: "castor sylius:theme:setup summit"
-                    -   name: Groove theme
-                        value: "castor sylius:theme:setup groove"
-                    -   name: Arena theme
-                        value: "castor sylius:theme:setup arena"
-                    -   name: Hearth theme
-                        value: "castor sylius:theme:setup hearth"
-                    -   name: Bloom theme
-                        value: "castor sylius:theme:setup bloom"
-                    -   name: Paws theme
-                        value: "castor sylius:theme:setup paws"
-                    -   name: Culture theme
-                        value: "castor sylius:theme:setup culture"
-                    -   name: Depot theme
-                        value: "castor sylius:theme:setup depot"
-                    -   name: Torque theme
-                        value: "castor sylius:theme:setup torque"
-                    -   name: Remove Menu items
-                        value: "castor sylius:menu:remove official_support sylius.ui.administration"
-                    -   name: Run Fixtures
-                        value: "castor sylius:fixtures -n"
-                    -   name: Custom plugin installers
-                        value: "castor sylius:plugin:add test_installer_with_function test_installer_with_class"
-                    -   name: Custom plugin removers
-                        value: "castor sylius:plugin:remove test_remover_with_function test_remover_with_class"
+                command: ${{ fromJson(needs.tasks-matrix.outputs.tasks) }}
         runs-on: ubuntu-latest
         steps:
             - name: Log in to registry
