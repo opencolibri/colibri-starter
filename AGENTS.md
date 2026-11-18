@@ -162,6 +162,13 @@ text or switching the text on it to a dark color, rather than lowering contrast.
 are listed apart and do not fail it); check focus rings and hover states by hand. See
 `docs/contributing/accessibility.md`.
 
+Where the header shows the category menu and the search is a header layout option shared by every theme
+(`castor sylius:theme:setup <theme> --menu=inline|below|bar --search=none|inline|below|icon`, or
+`castor sylius:theme:header` once installed), laid out once in `src/Themes/header_layout/` from the
+`header-menu--*` / `header-search--*` classes. Never lay the header row out in a theme (`order`, `flex-basis` on the
+menu column): style the menu and the search, and scope a placement-specific rule under its class. See
+`docs/themes/header-layout.md`.
+
 Never rely on `data-test-*` attributes in CSS selectors. They are testing
 helpers and may not be present in the production storefront; target stable
 classes or semantic structure instead.
