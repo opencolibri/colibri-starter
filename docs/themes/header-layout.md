@@ -25,6 +25,54 @@ On mobile, the menu always opens in an off-canvas panel and the search takes a r
 
 Drive only supports the `bar` menu: its aisles bar has a title and a promotion link of its own.
 
+## Examples
+
+The header of the Canvas theme on desktop (1440 px), light scheme.
+
+**Menu placement**
+
+`--menu=inline` (Canvas default):
+
+![Canvas header with the category menu in the logo row, between the logo and the account links](../images/header-layout-canvas-menu-inline.webp)
+
+`--menu=below`:
+
+![Canvas header with the category menu on a row of its own under the logo row, under a hairline](../images/header-layout-canvas-menu-below.webp)
+
+`--menu=bar`:
+
+![Canvas header with the category menu in a full-width band under the logo row](../images/header-layout-canvas-menu-bar.webp)
+
+**Search placement**
+
+`--search=inline`:
+
+![Canvas header with the search field in the logo row, next to the category menu](../images/header-layout-canvas-search-inline.webp)
+
+`--menu=bar --search=below`:
+
+![Canvas header with the search on a row of its own under the logo row, above the full-width menu band](../images/header-layout-canvas-menu-bar-search-below.webp)
+
+`--search=icon`, dropdown open:
+
+![Canvas header with a magnifier in the logo row and the search dropdown open under it](../images/header-layout-canvas-search-icon.webp)
+
+| `--search=icon` on mobile (390 px), dropdown open | `--menu=bar --search=inline`, dark scheme |
+|---|---|
+| ![Canvas header on mobile with the search dropdown spanning the screen width](../images/header-layout-canvas-search-icon-mobile.webp) | ![Canvas header in the dark scheme with the search in the logo row and the menu in a full-width band](../images/header-layout-canvas-menu-bar-search-inline-dark.webp) |
+
+**Themes with their own search or layout**
+
+Drive with `--search=icon`: its search by aisle, in the dropdown.
+
+![Drive header with the search by aisle open in the dropdown of the magnifier](../images/header-layout-drive-search-icon.webp)
+
+Depot with its default layout (`--menu=below`), then with `--menu=inline --search=icon`:
+
+![Depot header with the category menu on a row of its own under the logo row](../images/header-layout-depot-default.webp)
+
+![Depot header with the category menu in the logo row and a search magnifier](../images/header-layout-depot-menu-inline-search-icon.webp)
+
 ## Choose the layout
 
 ```bash
