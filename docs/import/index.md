@@ -5,8 +5,11 @@ sidebar:
   order: 1
 ---
 
-Import products, collections, images and prices from an **AI-generated catalog**, or load YAML produced by an external
-fetch step into Sylius fixtures. Provided by `opencolibri/starter-import`.
+Import products, collections, images and prices from an **AI-generated catalog** or from an **existing website** into
+Sylius fixtures. Provided by `opencolibri/starter-import`.
+
+Fetching an existing website scrapes it, which may not be legal: only do it to migrate a website you own or have the
+permission to copy. See [Existing website](existing-website.md).
 
 ## Prerequisites
 

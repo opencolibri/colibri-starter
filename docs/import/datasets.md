@@ -60,8 +60,9 @@ castor sylius:import:dataset:build --name="Tea House" --description="Loose leaf 
 castor sylius:import:dataset:build --source=existing --name="Tea House" --url=https://www.example-tea.com
 ```
 
-The `ai` source [generates the catalog with AI](ai-catalog.md) (`--limit`, 20 products at most); other sources are
-registered by the project, such as `existing` (the [fetch of an existing site](existing-website.md)) in the Sales Kit.
+The `ai` source [generates the catalog with AI](ai-catalog.md) (`--limit`, 20 products at most), and the `existing`
+source [fetches an existing website](existing-website.md): only fetch a website you own or have the permission to copy.
+A project can register other sources.
 The dataset is written to `.castor/import/datasets/<slug>/` (the slug of the name, or `--dataset`), then the image of
 every product and collection is downloaded or generated into its `media/`. Building it again replaces its catalog.
 
@@ -77,8 +78,8 @@ datasets one (the shop import functions then write to the dataset):
 ```php
 use OpenColibri\Starter\Import\Dataset\DatasetBuilders;
 
-DatasetBuilders::register('existing', static function (string $slug, string $name, string $description, ?string $url, int $limit): void {
-    fetch_import_data($url, $name, $description, $slug);
+DatasetBuilders::register('csv', static function (string $slug, string $name, string $description, ?string $url, int $limit): void {
+    // Write products.yaml and collections.yaml of $slug, e.g. from a CSV export of the current shop.
 });
 ```
 
