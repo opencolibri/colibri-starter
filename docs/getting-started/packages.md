@@ -21,4 +21,4 @@ The core is the Castor plugin itself. Every other package only contributes tasks
 from a file autoloaded by Composer, so installing a package is enough to get its tasks on your `SyliusService`.
 
 `opencolibri/starter-sales-kit` is the exception: a Symfony bundle, installed in the admin app of a sales kit (it
-drives the import tasks through castor-api). See its [README](https://github.com/opencolibri/colibri-starter/blob/main/src/SalesKit/README.md).
+drives the import tasks through castor-api). See the [sales kit](../import/sales-kit.md) page and its [README](https://github.com/opencolibri/colibri-starter/blob/main/src/SalesKit/README.md).
