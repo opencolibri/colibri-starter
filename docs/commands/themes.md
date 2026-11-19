@@ -20,6 +20,7 @@ To choose where the header shows the category menu and the search (see [header l
 ```bash
 castor sylius:theme:setup canvas --menu=below --search=inline
 castor sylius:theme:header --menu=bar          # change the layout of the installed theme
+castor sylius:theme:header --all --format=json # the layout of every installed theme, as JSON
 ```
 
 ## Available themes

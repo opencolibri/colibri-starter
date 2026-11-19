@@ -85,6 +85,18 @@ To change the layout of the installed theme without reinstalling it (no asset bu
 castor sylius:theme:header                        # shows the current layout
 castor sylius:theme:header --menu=bar --search=below
 castor sylius:theme:header --search=none --theme=cellar   # a theme installed with --target=theme-bundle
+castor sylius:theme:header --all                          # the layout of every installed theme
+```
+
+For scripts and other tools (like the sales kit admin), `--format=json` prints the layout and the placements each theme
+supports, after a change too, and errors exit with a non-zero code:
+
+```bash
+castor sylius:theme:header --all --format=json
+```
+
+```json
+{"themes": {"drive": {"menu": "bar", "search": "inline", "menus": ["bar"], "searches": ["none", "inline", "below", "icon"], "target": "theme-bundle"}}}
 ```
 
 With the [theme-bundle target](../commands/themes.md#one-theme-per-channel), each theme keeps its own layout, so
