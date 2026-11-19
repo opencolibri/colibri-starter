@@ -108,6 +108,8 @@ final class ShopThemeExtension implements ImportExtensionInterface
                             'fixtures' => [
                                 'import_channel_theme' => [
                                     'name' => 'import_channel_theme',
+                                    // After the channel fixture, which recreates the channel.
+                                    'priority' => -100,
                                     'options' => [
                                         'custom' => [
                                             ['channel' => $target['channel'], 'theme_name' => ThemeName::of($theme)],
