@@ -25,6 +25,10 @@ const viewportPresets = {
 // Chrome cannot encode a WebP image taller or wider than this.
 const maxWebpSize = 16383;
 const webpQuality = 85;
+// Theme thumbnails: the first screen of the "normal" homepage, scaled down, shipped with
+// opencolibri/starter-themes (src/Themes/previews/<theme>-<scheme>.webp) for theme pickers.
+const thumbnailSize = { width: 480, height: 300 };
+const defaultThumbnailsDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'Themes', 'previews');
 const defaultBaseUrl = `https://${storefrontDomain()}/en_US/`;
 // Data fixtures differ from one install to another: the product is discovered on
 // the storefront. This one is only preferred when it exists and can be bought,
@@ -80,7 +84,9 @@ screen size and color scheme. Screenshots are saved as
 docs/images/<theme>-<page>-<viewport>-<scheme>.webp, for example
 docs/images/canvas-homepage-mobile-dark.webp. When both schemes are captured,
 the homepage is also saved as <theme>-homepage-<viewport>-split.webp: the light
-page on the left half, the dark page on the right half.
+page on the left half, the dark page on the right half. With the "normal" size,
+the first screen of each homepage is also saved as a ${thumbnailSize.width}x${thumbnailSize.height}
+thumbnail, src/Themes/previews/<theme>-<scheme>.webp.
 
 Screen sizes: ${Object.entries(viewportPresets).map(([name, { width, height }]) => `${name} (${width}x${height})`).join(', ')}.
 Color schemes: ${colorSchemes.join(', ')}.
@@ -92,11 +98,13 @@ when it qualifies.
 
 Options:
   --include-cart       Add the selected product and capture the cart page
-  --split-only         Only recompose the split homepages from the light and
-                       dark homepages already saved in the output directory
+  --split-only         Only recompose the split homepages and the thumbnails from
+                       the homepages already saved in the output directory
   --product <slug>     Use this product instead of discovering one
   --base-url <url>    Storefront base URL (default: ${defaultBaseUrl})
   --output-dir <dir>  Screenshot output directory (default: docs/images)
+  --thumbnails-dir <dir>
+                      Thumbnail output directory (default: src/Themes/previews)
   --viewports <list>  Comma-separated screen sizes (default: ${Object.keys(viewportPresets).join(',')})
   --width <px>        Capture a single desktop viewport of this width instead,
                       saved with a <width>x<height> suffix
@@ -116,6 +124,7 @@ function parseArguments(args) {
   let productSlug;
   let baseUrl = defaultBaseUrl;
   let outputDir = 'docs/images';
+  let thumbnailsDir = defaultThumbnailsDir;
   let viewportNames;
   let width;
   let height;
@@ -170,13 +179,14 @@ function parseArguments(args) {
       continue;
     }
 
-    if (argument === '--base-url' || argument === '--output-dir' || argument === '--product') {
+    if (argument === '--base-url' || argument === '--output-dir' || argument === '--thumbnails-dir' || argument === '--product') {
       const value = args.shift();
       if (!value || value.startsWith('--')) {
         throw new Error(`${argument} requires a value`);
       }
       if (argument === '--base-url') baseUrl = value;
       else if (argument === '--product') productSlug = value;
+      else if (argument === '--thumbnails-dir') thumbnailsDir = value;
       else outputDir = value;
       continue;
     }
@@ -205,7 +215,7 @@ function parseArguments(args) {
   }
   parsedBaseUrl.pathname = `${parsedBaseUrl.pathname.replace(/\/+$/, '')}/`;
 
-  return { theme, includeCart, splitOnly, productSlug, baseUrl: parsedBaseUrl, outputDir: resolve(outputDir), viewports, schemes };
+  return { theme, includeCart, splitOnly, productSlug, baseUrl: parsedBaseUrl, outputDir: resolve(outputDir), thumbnailsDir: resolve(thumbnailsDir), viewports, schemes };
 }
 
 function findChrome() {
@@ -274,7 +284,7 @@ async function waitForEvent(events, method) {
 }
 
 async function main() {
-  const { theme, includeCart, splitOnly, productSlug, baseUrl, outputDir, viewports, schemes } = parseArguments(process.argv.slice(2));
+  const { theme, includeCart, splitOnly, productSlug, baseUrl, outputDir, thumbnailsDir, viewports, schemes } = parseArguments(process.argv.slice(2));
   const chrome = findChrome();
   if (!chrome) throw new Error('Could not find Chrome or Chromium; set CHROME_BIN to its executable');
 
@@ -503,6 +513,35 @@ async function main() {
       console.log(`light + dark -> ${path}`);
     };
 
+    // Saves the first screen of a "normal" homepage, scaled down to a thumbnail.
+    const composeThumbnail = async (homepage, scheme) => {
+      const loaded = waitForEvent(events, 'Page.loadEventFired');
+      await send('Page.navigate', { url: 'about:blank' });
+      await loaded;
+      const data = await evaluate(`(async () => {
+        const image = await new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = () => resolve(image);
+          image.onerror = () => reject(new Error('Could not decode a screenshot'));
+          image.src = 'data:image/webp;base64,' + ${JSON.stringify(homepage)};
+        });
+        const canvas = document.createElement('canvas');
+        canvas.width = ${thumbnailSize.width};
+        canvas.height = ${thumbnailSize.height};
+        // The first screen, whatever the scale of the full-page screenshot.
+        const width = image.naturalWidth;
+        const height = Math.min(image.naturalHeight, Math.round(width * ${thumbnailSize.height / thumbnailSize.width}));
+        const context = canvas.getContext('2d');
+        context.imageSmoothingQuality = 'high';
+        context.drawImage(image, 0, 0, width, height, 0, 0, canvas.width, canvas.width * height / width);
+        return canvas.toDataURL('image/webp', ${webpQuality / 100}).split(',')[1];
+      })()`, { awaitPromise: true });
+      const path = join(thumbnailsDir, `${theme}-${scheme}.webp`);
+      mkdirSync(thumbnailsDir, { recursive: true });
+      writeFileSync(path, Buffer.from(data, 'base64'));
+      console.log(`${scheme} homepage -> ${path}`);
+    };
+
     await send('Page.enable');
     await send('Runtime.enable');
 
@@ -515,6 +554,10 @@ async function main() {
           return readFileSync(path).toString('base64');
         });
         await composeSplit(light, dark, next.height / next.width, join(outputDir, `${outputTheme}-homepage-${next.name}-split.webp`));
+      }
+      for (const name of colorSchemes) {
+        const path = join(outputDir, `${outputTheme}-homepage-normal-${name}.webp`);
+        if (existsSync(path)) await composeThumbnail(readFileSync(path).toString('base64'), name);
       }
       return;
     }
@@ -626,6 +669,9 @@ async function main() {
           join(outputDir, `${outputTheme}-homepage-${next.name}-split.webp`),
         );
       }
+    }
+    for (const nextScheme of schemes) {
+      if (homepages.has(`normal-${nextScheme}`)) await composeThumbnail(homepages.get(`normal-${nextScheme}`), nextScheme);
     }
     homepages.clear();
 
