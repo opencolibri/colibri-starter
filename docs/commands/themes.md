@@ -40,6 +40,16 @@ castor sylius:theme:setup groove --target=theme-bundle
 castor sylius:theme:channel FASHION_WEB groove    # "default" gives the channel back the Sylius look
 ```
 
+To install every theme at once (from scratch, with a single asset build), and list the themes a channel can pick:
+
+```bash
+castor sylius:theme:setup all --target=theme-bundle
+castor sylius:theme:list                           # --format=json: {"themes": ["default", "arena", ...]}
+```
+
+Every theme keeps the header layout it was designed with: change one afterwards with
+`castor sylius:theme:header --theme=<theme>` (see [header layout](../themes/header-layout.md)).
+
 The channel theme can also be picked in the admin (channel form, **Theme** field). Each installed theme gets:
 
 | What | Where |
