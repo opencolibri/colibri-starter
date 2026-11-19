@@ -130,6 +130,8 @@ $ignored = [
     'src/Datasets/',
     'src/Import/',
     'src/Upsun/',
+    // The sales kit admin bundle is never installed in the test application.
+    'src/SalesKit/',
 ];
 
 $startsWith = static function (string $file, array $prefixes): bool {
