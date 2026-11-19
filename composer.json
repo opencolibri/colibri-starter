@@ -29,7 +29,21 @@
     },
     "require-dev": {
         "jolicode/castor": "^1.6",
-        "phpunit/phpunit": "^13.2"
+        "knplabs/knp-menu-bundle": "^3.0",
+        "pagerfanta/core": "^4.6",
+        "phpunit/phpunit": "^13.2",
+        "sylius/admin-ui": "^0.14",
+        "sylius/grid-bundle": "^1.13",
+        "sylius/shadcn-admin-ui": "^0.14@dev",
+        "sylius/twig-hooks": "^0.14",
+        "sylius/ui-translations": "^0.14",
+        "symfony/browser-kit": "^7.4|^8.0",
+        "symfony/css-selector": "^7.4|^8.0",
+        "symfony/form": "^7.4",
+        "symfony/framework-bundle": "^7.4",
+        "symfony/security-bundle": "^7.4",
+        "symfony/ux-live-component": "^2.30 || ^3.5",
+        "symfony/validator": "^7.4"
     },
     "replace": {
         "opencolibri/starter-core": "self.version",
@@ -37,6 +51,7 @@
         "opencolibri/starter-import": "self.version",
         "opencolibri/starter-menu": "self.version",
         "opencolibri/starter-plugins": "self.version",
+        "opencolibri/starter-sales-kit": "self.version",
         "opencolibri/starter-themes": "self.version",
         "opencolibri/starter-upsun": "self.version"
     },
@@ -50,6 +65,7 @@
             "OpenColibri\\Starter\\Import\\": "src/Import/src/",
             "OpenColibri\\Starter\\Menu\\": "src/Menu/src/",
             "OpenColibri\\Starter\\Plugins\\": "src/Plugins/src/",
+            "OpenColibri\\Starter\\SalesKit\\": "src/SalesKit/src/",
             "OpenColibri\\Starter\\Themes\\": "src/Themes/src/",
             "OpenColibri\\Starter\\Upsun\\": "src/Upsun/src/"
         },
@@ -74,6 +90,7 @@
             "OpenColibri\\Starter\\Import\\Tests\\": "src/Import/tests/",
             "OpenColibri\\Starter\\Menu\\Tests\\": "src/Menu/tests/",
             "OpenColibri\\Starter\\Plugins\\Tests\\": "src/Plugins/tests/",
+            "OpenColibri\\Starter\\SalesKit\\Tests\\": "src/SalesKit/tests/",
             "OpenColibri\\Starter\\Themes\\Tests\\": "src/Themes/tests/",
             "OpenColibri\\Starter\\Upsun\\Tests\\": "src/Upsun/tests/",
             "OpenColibri\\Starter\\Tests\\": "tests/",
@@ -83,6 +100,22 @@
     "extra": {
         "branch-alias": {
             "dev-main": "0.1-dev"
+        },
+        "monorepo": {
+            "bundle-dependencies": [
+                "knplabs/knp-menu-bundle",
+                "pagerfanta/core",
+                "sylius/admin-ui",
+                "sylius/grid-bundle",
+                "sylius/shadcn-admin-ui",
+                "sylius/twig-hooks",
+                "sylius/ui-translations",
+                "symfony/form",
+                "symfony/framework-bundle",
+                "symfony/security-bundle",
+                "symfony/ux-live-component",
+                "symfony/validator"
+            ]
         }
     }
 }

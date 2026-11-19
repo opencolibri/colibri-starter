@@ -58,4 +58,28 @@ final class MonorepoTest extends TestCase
         static::assertNotSame($root, $this->monorepo->mergedRootComposer($root));
         static::assertSame($this->monorepo->rootComposer(), $this->monorepo->mergedRootComposer($root));
     }
+
+    public function testTheDependenciesOfTheSymfonyBundlesStayOutOfTheCastorRuntime(): void
+    {
+        $merged = $this->monorepo->mergedRootComposer();
+
+        // castor.composer.json installs the root package as a dependency: its require-dev is ignored.
+        static::assertArrayNotHasKey('sylius/shadcn-admin-ui', $merged['require']);
+        static::assertArrayHasKey('sylius/shadcn-admin-ui', $merged['require-dev']);
+        static::assertContains('sylius/shadcn-admin-ui', $merged['extra']['monorepo'][Monorepo::BUNDLE_DEV_DEPENDENCIES_KEY]);
+        // A dependency of a Castor package stays in require.
+        static::assertArrayHasKey('symfony/yaml', $merged['require']);
+        static::assertArrayNotHasKey('symfony/yaml', $merged['require-dev']);
+        // The root-only dev dependencies are kept.
+        static::assertArrayHasKey('phpunit/phpunit', $merged['require-dev']);
+    }
+
+    public function testItRemovesADependencyABundleNoLongerRequires(): void
+    {
+        $root = $this->monorepo->rootComposer();
+        $root['require-dev']['acme/dropped-bundle-dependency'] = '^1.0';
+        $root['extra']['monorepo'][Monorepo::BUNDLE_DEV_DEPENDENCIES_KEY][] = 'acme/dropped-bundle-dependency';
+
+        static::assertSame($this->monorepo->rootComposer(), $this->monorepo->mergedRootComposer($root));
+    }
 }

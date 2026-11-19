@@ -9,6 +9,7 @@ use Castor\Attribute\AsOption;
 use Castor\Attribute\AsTask;
 use OpenColibri\Starter\Core\App;
 use OpenColibri\Starter\Core\Component\ComponentChoices;
+use OpenColibri\Starter\Core\Theme\ThemeName;
 use OpenColibri\Starter\Core\Util\Assets;
 use OpenColibri\Starter\Core\Util\Docker;
 use OpenColibri\Starter\Core\Util\Symfony;
@@ -32,7 +33,7 @@ final class ThemeTasks
         yield [
             'task' => new AsTask('setup', 'sylius:theme', 'Setup themes', ['setup-theme']),
             'function' => static function (
-                #[AsArgument]
+                #[AsArgument(description: 'The theme, "default" for the Sylius look, or "all" (with --target=theme-bundle) to install every theme')]
                 ?string $theme = null,
                 #[AsOption(description: 'Where to install the theme: "flat" (over the app, for every channel) or "theme-bundle" (next to the other themes, picked by each channel)')]
                 string $target = 'flat',
@@ -40,14 +41,47 @@ final class ThemeTasks
                 ?string $menu = null,
                 #[AsOption(description: 'Where the header search goes: "none", "inline" (in the logo row), "below" (on a row of its own) or "icon" (a magnifier that opens it in a dropdown). Default: the theme layout')]
                 ?string $search = null,
-            ) use ($app): void {
+            ) use ($app): int {
                 if (!\in_array($target, ['flat', ThemeBundle::TARGET], true)) {
                     io()->error(\sprintf('Unknown target "%s": use "flat" or "%s".', $target, ThemeBundle::TARGET));
 
-                    return;
+                    return 1;
                 }
 
                 $themeInstallers = Themes::installers();
+
+                // Every theme next to each other, picked by each channel: one asset build for all.
+                if ('all' === $theme) {
+                    if (ThemeBundle::TARGET !== $target) {
+                        io()->error(\sprintf('Over the app, only one theme applies: install every theme with --target=%s.', ThemeBundle::TARGET));
+
+                        return 1;
+                    }
+
+                    if (null !== $menu || null !== $search) {
+                        io()->error('Every theme keeps the header layout it was designed with: change one afterwards with "castor sylius:theme:header --theme=<theme>".');
+
+                        return 1;
+                    }
+
+                    $themes = array_values(array_filter(array_keys($themeInstallers), ThemeBundle::supports(...)));
+
+                    // A theme installed over the app would apply to every channel.
+                    foreach (Themes::removers() as $remover) {
+                        $remover($app);
+                    }
+
+                    HeaderLayout::configure(null, null);
+                    ThemeBundle::installAll($app, $themes);
+                    Assets::install($app);
+                    Assets::build($app);
+                    Symfony::cacheClear($app);
+
+                    io()->success(\sprintf('Installed %d themes next to each other: %s. Pick one for a channel with "castor sylius:theme:channel <channel> <theme>".', \count($themes), implode(', ', $themes)));
+
+                    return 0;
+                }
+
                 $availableThemes = array_keys($themeInstallers);
                 $availableThemes[] = 'default';
                 sort($availableThemes);
@@ -84,7 +118,7 @@ final class ThemeTasks
                 if (!isset($installers[$theme])) {
                     io()->error(\sprintf('Unknown theme installer "%s", skipping.', $theme));
 
-                    return;
+                    return 1;
                 }
 
                 if ('default' !== $theme) {
@@ -93,7 +127,7 @@ final class ThemeTasks
                     if ([] !== $errors) {
                         io()->error($errors);
 
-                        return;
+                        return 1;
                     }
 
                     HeaderLayout::configure($menu, $search);
@@ -105,7 +139,7 @@ final class ThemeTasks
                     if (!ThemeBundle::supports($theme)) {
                         io()->error(\sprintf('The "%s" theme cannot be installed with the theme-bundle target.', $theme));
 
-                        return;
+                        return 1;
                     }
 
                     // The hooks and templates of a flat theme would apply to every channel.
@@ -124,7 +158,7 @@ final class ThemeTasks
                         $theme,
                     ));
 
-                    return;
+                    return 0;
                 }
 
                 // A flat theme applies to every channel: drop the themes picked by channels.
@@ -148,6 +182,38 @@ final class ThemeTasks
                 $installers[$theme]();
 
                 io()->success(\sprintf('"%s" theme has been installed successfully.', $theme));
+
+                return 0;
+            },
+        ];
+
+        yield [
+            'task' => new AsTask('list', 'sylius:theme', 'List the themes a channel can pick: the Sylius look and the themes installed with the theme-bundle target'),
+            'function' => static function (
+                #[AsOption(description: 'Output format: "text" or "json" ({"themes": ["default", "<theme>", ...]})')]
+                string $format = 'text',
+            ) use ($app): int {
+                if (!\in_array($format, ['text', 'json'], true)) {
+                    io()->getErrorStyle()->error(\sprintf('Unknown format "%s": use "text" or "json".', $format));
+
+                    return 1;
+                }
+
+                $themes = ThemeBundle::pickable($app);
+
+                if ('json' === $format) {
+                    io()->writeln(json_encode(['themes' => $themes], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES));
+
+                    return 0;
+                }
+
+                io()->listing($themes);
+
+                if ([ThemeName::DEFAULT] === $themes) {
+                    io()->text(\sprintf('No theme is installed with the theme-bundle target: install them with "castor sylius:theme:setup all --target=%s".', ThemeBundle::TARGET));
+                }
+
+                return 0;
             },
         ];
 
@@ -158,23 +224,23 @@ final class ThemeTasks
                 string $channel,
                 #[AsArgument(description: 'Theme, or "default" for the app look')]
                 string $theme = 'default',
-            ) use ($app): void {
+            ) use ($app): int {
                 if (!preg_match('/^[A-Za-z0-9_.-]+$/', $channel)) {
-                    io()->error(\sprintf('Invalid channel code "%s".', $channel));
+                    io()->getErrorStyle()->error(\sprintf('Invalid channel code "%s".', $channel));
 
-                    return;
+                    return 1;
                 }
 
                 $installedThemes = ThemeBundle::installed($app);
 
                 if ('default' !== $theme && !\in_array($theme, $installedThemes, true)) {
-                    io()->error(\sprintf(
+                    io()->getErrorStyle()->error(\sprintf(
                         'The "%s" theme is not installed with the theme-bundle target. Installed themes: %s.',
                         $theme,
                         [] === $installedThemes ? 'none' : implode(', ', $installedThemes),
                     ));
 
-                    return;
+                    return 1;
                 }
 
                 $themeName = 'default' === $theme ? 'NULL' : \sprintf("'%s'", ThemeBundle::themeName($theme));
@@ -186,64 +252,115 @@ final class ThemeTasks
                 ));
 
                 io()->success(\sprintf('The "%s" channel now uses the "%s" theme.', $channel, $theme));
+
+                return 0;
             },
         ];
 
         yield [
-            'task' => new AsTask('header', 'sylius:theme', 'Change where the header shows the category menu and the search'),
+            'task' => new AsTask('header', 'sylius:theme', 'Show or change where the header shows the category menu and the search'),
             'function' => static function (
                 #[AsOption(description: 'Where the category menu goes: "inline" (in the logo row), "below" (on a row of its own) or "bar" (in a full-width band)')]
                 ?string $menu = null,
                 #[AsOption(description: 'Where the header search goes: "none", "inline" (in the logo row), "below" (on a row of its own) or "icon" (a magnifier that opens it in a dropdown)')]
                 ?string $search = null,
-                #[AsOption(description: 'The theme to change, among the themes installed with the theme-bundle target (default: the theme installed over the app)')]
+                #[AsOption(description: 'The theme to show or change, among the themes installed with the theme-bundle target (default: the theme installed over the app)')]
                 ?string $theme = null,
-            ) use ($app): void {
-                $hooksFile = null === $theme
-                    ? $app->directory() . '/' . HeaderLayout::HOOKS_FILE
-                    : $app->directory() . '/' . ThemeBundle::HOOKS_DIR . '/' . $theme . '/' . substr(HeaderLayout::HOOKS_FILE, \strlen('config/sylius/twig_hooks/'));
+                #[AsOption(description: 'Show the layout of every installed theme')]
+                bool $all = false,
+                #[AsOption(description: 'Output format: "text" or "json" ({"themes": {"<theme>": {"menu", "search", "menus", "searches"}}})')]
+                string $format = 'text',
+            ) use ($app): int {
+                $errors = io()->getErrorStyle();
 
+                if (!\in_array($format, ['text', 'json'], true)) {
+                    $errors->error(\sprintf('Unknown format "%s": use "text" or "json".', $format));
+
+                    return 1;
+                }
+
+                // Every layout, or the layout of one theme.
+                $print = static function (array $layouts) use ($format): void {
+                    if ('json' === $format) {
+                        io()->writeln(json_encode(['themes' => (object) $layouts], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES));
+
+                        return;
+                    }
+
+                    foreach ($layouts as $name => $layout) {
+                        io()->text(\sprintf('The "%s" theme shows the menu "%s" and the search "%s".', $name, $layout['menu'], $layout['search']));
+                    }
+                };
+
+                if ($all) {
+                    if (null !== $menu || null !== $search || null !== $theme) {
+                        $errors->error('--all only shows the layouts: change one theme at a time, with --theme.');
+
+                        return 1;
+                    }
+
+                    $layouts = HeaderLayout::all($app);
+
+                    if ([] === $layouts) {
+                        $errors->error('No installed theme has a header layout: install one with "castor sylius:theme:setup <theme>".');
+
+                        return 1;
+                    }
+
+                    $print($layouts);
+
+                    return 0;
+                }
+
+                $hooksFile = HeaderLayout::hooksFileOf($app, $theme);
                 $current = HeaderLayout::read($hooksFile);
 
                 if (null === $current) {
-                    io()->error(null === $theme
+                    $errors->error(null === $theme
                         ? 'No theme is installed over the app: install one with "castor sylius:theme:setup <theme>", or pick a theme-bundle theme with --theme.'
-                        : \sprintf('The "%s" theme is not installed with the theme-bundle target.', $theme));
+                        : \sprintf('The "%s" theme is not installed with the theme-bundle target, or was installed before the header layout existed: reinstall it.', $theme));
 
-                    return;
+                    return 1;
                 }
 
                 if (null === $menu && null === $search) {
-                    io()->text(\sprintf(
-                        'The "%s" theme shows the menu "%s" and the search "%s". Change them with --menu and --search.',
-                        $current['theme'],
-                        $current['options']['menu'],
-                        $current['options']['search'],
-                    ));
+                    $print([$current['theme'] => HeaderLayout::describe($current['theme'], $current['options'])]);
 
-                    return;
+                    if ('text' === $format) {
+                        io()->text('Change them with --menu and --search.');
+                    }
+
+                    return 0;
                 }
 
-                $errors = HeaderLayout::validate($current['theme'], $menu, $search);
+                $validation = HeaderLayout::validate($current['theme'], $menu, $search);
 
-                if ([] !== $errors) {
-                    io()->error($errors);
+                if ([] !== $validation) {
+                    $errors->error($validation);
 
-                    return;
+                    return 1;
                 }
 
                 HeaderLayout::update($hooksFile, array_filter(['menu' => $menu, 'search' => $search], static fn(?string $value): bool => null !== $value));
                 // The layout is hook configuration, styled for every placement: no asset build needed.
                 Symfony::cacheClear($app);
 
-                $updated = HeaderLayout::read($hooksFile);
+                $updated = HeaderLayout::read($hooksFile) ?? $current;
+
+                if ('json' === $format) {
+                    $print([$current['theme'] => HeaderLayout::describe($current['theme'], $updated['options'])]);
+
+                    return 0;
+                }
 
                 io()->success(\sprintf(
                     'The "%s" theme now shows the menu "%s" and the search "%s".',
                     $current['theme'],
-                    $updated['options']['menu'] ?? '?',
-                    $updated['options']['search'] ?? '?',
+                    $updated['options']['menu'],
+                    $updated['options']['search'],
                 ));
+
+                return 0;
             },
         ];
     }

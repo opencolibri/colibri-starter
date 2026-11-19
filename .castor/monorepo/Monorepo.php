@@ -21,6 +21,12 @@ final class Monorepo
     public const string NAMESPACE = 'OpenColibri\\Starter';
     public const string CORE_PACKAGE = 'opencolibri/starter-core';
 
+    /**
+     * Root extra key listing the root require-dev entries generated from the Symfony bundles, so that a dependency a
+     * bundle drops is removed on the next merge.
+     */
+    public const string BUNDLE_DEV_DEPENDENCIES_KEY = 'bundle-dependencies';
+
     public function __construct(
         private readonly string $rootDir,
     ) {}
@@ -109,6 +115,11 @@ final class Monorepo
      * Builds the root composer.json from the packages, keeping every root key
      * that is not derived from them (name, require-dev, config, scripts...).
      *
+     * The dependencies of the Symfony bundles (packages of type "symfony-bundle", like the sales kit) go to the root
+     * require-dev instead: castor.composer.json installs the root package as a dependency, and Composer ignores the
+     * require-dev of a dependency, so the Castor runtime does not get their Symfony and Sylius bundles. The root
+     * install (tests, PHPStan) still does.
+     *
      * @param array<string, mixed>|null $root
      *
      * @return array<string, mixed>
@@ -120,6 +131,7 @@ final class Monorepo
         $internal = array_column($packages, 'name');
 
         $require = [];
+        $bundleRequire = [];
         $suggest = [];
         $psr4 = [];
         $files = [];
@@ -130,12 +142,18 @@ final class Monorepo
             $composer = $package['composer'];
             $replace[$package['name']] = 'self.version';
 
+            $isBundle = 'symfony-bundle' === ($composer['type'] ?? null);
+
             foreach ($composer['require'] ?? [] as $dependency => $constraint) {
                 if (\in_array($dependency, $internal, true)) {
                     continue;
                 }
 
-                $require[$dependency] ??= $constraint;
+                if ($isBundle) {
+                    $bundleRequire[$dependency] ??= $constraint;
+                } else {
+                    $require[$dependency] ??= $constraint;
+                }
             }
 
             foreach ($composer['suggest'] ?? [] as $dependency => $reason) {
@@ -156,9 +174,38 @@ final class Monorepo
         }
 
         $require = self::sortDependencies($require);
+        // A dependency of a Castor package stays in require, the Castor runtime needs it.
+        $bundleRequire = array_diff_key($bundleRequire, $require);
         ksort($suggest);
 
         $root['require'] = $require;
+
+        $generated = $root['extra']['monorepo'][self::BUNDLE_DEV_DEPENDENCIES_KEY] ?? [];
+        $requireDev = array_diff_key($root['require-dev'] ?? [], array_flip(\is_array($generated) ? $generated : []));
+        $requireDev = array_merge($requireDev, $bundleRequire);
+
+        if ([] !== $requireDev) {
+            $root['require-dev'] = self::sortDependencies($requireDev);
+        } else {
+            unset($root['require-dev']);
+        }
+
+        $bundleDependencies = array_keys($bundleRequire);
+        sort($bundleDependencies);
+
+        if ([] !== $bundleDependencies) {
+            $root['extra']['monorepo'][self::BUNDLE_DEV_DEPENDENCIES_KEY] = $bundleDependencies;
+        } else {
+            unset($root['extra']['monorepo'][self::BUNDLE_DEV_DEPENDENCIES_KEY]);
+
+            if ([] === ($root['extra']['monorepo'] ?? null)) {
+                unset($root['extra']['monorepo']);
+            }
+
+            if ([] === ($root['extra'] ?? null)) {
+                unset($root['extra']);
+            }
+        }
         $root['replace'] = $replace;
 
         if ([] !== $suggest) {

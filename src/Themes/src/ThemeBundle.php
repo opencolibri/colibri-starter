@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 use OpenColibri\Starter\Core\App;
+use OpenColibri\Starter\Core\Theme\ThemeName;
 use OpenColibri\Starter\Core\Storefront\Brand;
 use OpenColibri\Starter\Core\Storefront\Hero;
 use OpenColibri\Starter\Core\Util\Docker;
@@ -17,6 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 use function Castor\fs;
+use function Castor\io;
 
 /**
  * The theme-bundle install target: every theme lives in its own Sylius theme, and each channel picks one.
@@ -82,10 +84,38 @@ final readonly class ThemeBundle
         return $themes;
     }
 
+    /**
+     * The themes a channel can pick: the Sylius look ("default"), then the installed ones.
+     *
+     * @return list<string>
+     */
+    public static function pickable(App $app): array
+    {
+        return [ThemeName::DEFAULT, ...self::installed($app)];
+    }
+
+    /**
+     * Installs every given theme next to each other, from scratch: the hooks of each theme are generated from the app
+     * hooks, which an outdated theme could break. The assets are built once afterwards, by the caller.
+     *
+     * @param list<string> $themes
+     */
+    public static function installAll(App $app, array $themes): void
+    {
+        foreach (self::installed($app) as $theme) {
+            self::remove($app, $theme);
+        }
+
+        foreach ($themes as $theme) {
+            io()->section(\sprintf('Installing the "%s" theme', $theme));
+            self::install($app, $theme);
+        }
+    }
+
     /** The name sylius/theme-bundle gives the theme, stored in sylius_channel.theme_name. */
     public static function themeName(string $theme): string
     {
-        return 'opencolibri/' . self::slug($theme);
+        return ThemeName::of($theme) ?? throw new \InvalidArgumentException('The Sylius look has no theme name.');
     }
 
     /** Matches App\Themes\ThemeHookRenderer::prefix(), which reads the theme name. */

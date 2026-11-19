@@ -14,10 +14,12 @@ use Castor\Docker\Event\RegisterServiceEvent;
 use Castor\Docker\Service\PhpMode;
 use Castor\Docker\Service\PostgresService;
 use OpenColibri\Starter\Core\Service\SyliusService;
+use OpenColibri\Starter\Datasets\DatasetPreview;
 use OpenColibri\Starter\Plugins\Attribute\AsPluginInstaller;
 use OpenColibri\Starter\Plugins\Attribute\AsPluginRemover;
 use OpenColibri\Starter\Themes\Themes;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Yaml\Yaml;
 
 use function Castor\io;
 use function Castor\context;
@@ -152,6 +154,54 @@ function docs_screenshots(
     }
 
     io()->success(sprintf('Screenshots refreshed in docs/images for: %s.', implode(', ', $themes)));
+
+    return 0;
+}
+
+#[AsTask(description: 'Refresh the thumbnails of the ready-made datasets (src/Datasets/previews)', namespace: 'datasets', name: 'thumbnails')]
+function datasets_thumbnails(): int
+{
+    if (!function_exists('imagecreatefromwebp')) {
+        io()->error('The GD extension with WebP support is required.');
+
+        return 1;
+    }
+
+    $count = 0;
+
+    foreach (glob(DatasetPreview::datasetsDir() . '/*', \GLOB_ONLYDIR) ?: [] as $datasetDir) {
+        $dataset = basename($datasetDir);
+        $products = Yaml::parseFile($datasetDir . '/products.yaml');
+        $image = is_array($products) && is_array($products['products'][0] ?? null) ? ($products['products'][0]['image'] ?? null) : null;
+        $source = is_string($image) ? @imagecreatefromstring((string) @file_get_contents($datasetDir . '/' . $image)) : false;
+
+        if (false === $source) {
+            io()->error(sprintf('The first product of the "%s" dataset has no readable image.', $dataset));
+
+            return 1;
+        }
+
+        // The whole image, centered on a transparent canvas: product shots are cut out on a transparent background.
+        $thumbnail = imagecreatetruecolor(DatasetPreview::WIDTH, DatasetPreview::HEIGHT);
+        imagealphablending($thumbnail, false);
+        imagesavealpha($thumbnail, true);
+        imagefill($thumbnail, 0, 0, imagecolorallocatealpha($thumbnail, 0, 0, 0, 127));
+        imagealphablending($thumbnail, true);
+
+        $scale = min(DatasetPreview::WIDTH / imagesx($source), DatasetPreview::HEIGHT / imagesy($source));
+        $width = (int) round(imagesx($source) * $scale);
+        $height = (int) round(imagesy($source) * $scale);
+        imagecopyresampled($thumbnail, $source, intdiv(DatasetPreview::WIDTH - $width, 2), intdiv(DatasetPreview::HEIGHT - $height, 2), 0, 0, $width, $height, imagesx($source), imagesy($source));
+
+        if (!is_dir(DatasetPreview::dir())) {
+            mkdir(DatasetPreview::dir(), 0o775, true);
+        }
+
+        imagewebp($thumbnail, DatasetPreview::dir() . '/' . $dataset . '.webp', 80);
+        ++$count;
+    }
+
+    io()->success(sprintf('Saved the thumbnails of %d datasets in %s.', $count, DatasetPreview::dir()));
 
     return 0;
 }

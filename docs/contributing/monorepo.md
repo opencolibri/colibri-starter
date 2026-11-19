@@ -21,6 +21,7 @@ src/
 ├── Menu/              opencolibri/starter-menu
 ├── Datasets/          opencolibri/starter-datasets    (+ datasets/)
 ├── Import/            opencolibri/starter-import      (+ resources/)
+├── SalesKit/          opencolibri/starter-sales-kit   (Symfony bundle)
 └── Upsun/             opencolibri/starter-upsun
 tests/Integration/     cross-package tests
 .castor/monorepo/      monorepo tooling (castor monorepo:*)
@@ -28,6 +29,11 @@ tests/Integration/     cross-package tests
 
 The `composer.json` of each package is the source of truth: the root `composer.json` (require, `replace`, autoload)
 is **generated** from them. Internal dependencies use `self.version` so all packages are always released together.
+
+The dependencies of a Symfony bundle (a package of type `symfony-bundle`, like the sales kit) go to the root
+`require-dev` instead, listed in `extra.monorepo.bundle-dependencies`: `castor.composer.json` installs the root package
+as a dependency, and Composer ignores the `require-dev` of a dependency, so the Castor runtime does not get their Symfony
+and Sylius bundles. `composer install` at the root still installs them, for the tests and PHPStan.
 
 ## Monorepo tasks
 
