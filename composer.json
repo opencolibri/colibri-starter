@@ -18,32 +18,32 @@
     "require": {
         "php": ">=8.3",
         "castor-php/docker": "^0.10",
-        "knplabs/knp-menu-bundle": "^3.0",
         "nikic/php-parser": "^5.0",
+        "symfony/ai-ollama-platform": "^0.12.0",
+        "symfony/ai-open-router-platform": "^0.12.0",
+        "symfony/ai-platform": "^0.12.0",
+        "symfony/dotenv": "^7.4|^8.0",
+        "symfony/http-client": "^7.4|^8.0",
+        "symfony/process": "^7.4|^8.0",
+        "symfony/yaml": "^7.4|^8.0"
+    },
+    "require-dev": {
+        "jolicode/castor": "^1.6",
+        "knplabs/knp-menu-bundle": "^3.0",
         "pagerfanta/core": "^4.6",
+        "phpunit/phpunit": "^13.2",
         "sylius/admin-ui": "^0.14",
         "sylius/grid-bundle": "^1.13",
         "sylius/shadcn-admin-ui": "^0.14@dev",
         "sylius/twig-hooks": "^0.14",
         "sylius/ui-translations": "^0.14",
-        "symfony/ai-ollama-platform": "^0.12.0",
-        "symfony/ai-open-router-platform": "^0.12.0",
-        "symfony/ai-platform": "^0.12.0",
-        "symfony/dotenv": "^7.4|^8.0",
+        "symfony/browser-kit": "^7.4|^8.0",
+        "symfony/css-selector": "^7.4|^8.0",
         "symfony/form": "^7.4",
         "symfony/framework-bundle": "^7.4",
-        "symfony/http-client": "^7.4|^8.0",
-        "symfony/process": "^7.4|^8.0",
         "symfony/security-bundle": "^7.4",
         "symfony/ux-live-component": "^2.30 || ^3.5",
-        "symfony/validator": "^7.4",
-        "symfony/yaml": "^7.4|^8.0"
-    },
-    "require-dev": {
-        "jolicode/castor": "^1.6",
-        "phpunit/phpunit": "^13.2",
-        "symfony/browser-kit": "^7.4|^8.0",
-        "symfony/css-selector": "^7.4|^8.0"
+        "symfony/validator": "^7.4"
     },
     "replace": {
         "opencolibri/starter-core": "self.version",
@@ -100,6 +100,22 @@
     "extra": {
         "branch-alias": {
             "dev-main": "0.1-dev"
+        },
+        "monorepo": {
+            "bundle-dependencies": [
+                "knplabs/knp-menu-bundle",
+                "pagerfanta/core",
+                "sylius/admin-ui",
+                "sylius/grid-bundle",
+                "sylius/shadcn-admin-ui",
+                "sylius/twig-hooks",
+                "sylius/ui-translations",
+                "symfony/form",
+                "symfony/framework-bundle",
+                "symfony/security-bundle",
+                "symfony/ux-live-component",
+                "symfony/validator"
+            ]
         }
     },
     "repositories": [

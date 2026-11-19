@@ -161,7 +161,7 @@ function docs_screenshots(
 #[AsTask(description: 'Refresh the thumbnails of the ready-made datasets (src/Datasets/previews)', namespace: 'datasets', name: 'thumbnails')]
 function datasets_thumbnails(): int
 {
-    if (!\function_exists('imagecreatefromwebp')) {
+    if (!function_exists('imagecreatefromwebp')) {
         io()->error('The GD extension with WebP support is required.');
 
         return 1;
@@ -172,11 +172,11 @@ function datasets_thumbnails(): int
     foreach (glob(DatasetPreview::datasetsDir() . '/*', \GLOB_ONLYDIR) ?: [] as $datasetDir) {
         $dataset = basename($datasetDir);
         $products = Yaml::parseFile($datasetDir . '/products.yaml');
-        $image = \is_array($products) && \is_array($products['products'][0] ?? null) ? ($products['products'][0]['image'] ?? null) : null;
-        $source = \is_string($image) ? @imagecreatefromstring((string) @file_get_contents($datasetDir . '/' . $image)) : false;
+        $image = is_array($products) && is_array($products['products'][0] ?? null) ? ($products['products'][0]['image'] ?? null) : null;
+        $source = is_string($image) ? @imagecreatefromstring((string) @file_get_contents($datasetDir . '/' . $image)) : false;
 
         if (false === $source) {
-            io()->error(\sprintf('The first product of the "%s" dataset has no readable image.', $dataset));
+            io()->error(sprintf('The first product of the "%s" dataset has no readable image.', $dataset));
 
             return 1;
         }
@@ -201,7 +201,7 @@ function datasets_thumbnails(): int
         ++$count;
     }
 
-    io()->success(\sprintf('Saved the thumbnails of %d datasets in %s.', $count, DatasetPreview::dir()));
+    io()->success(sprintf('Saved the thumbnails of %d datasets in %s.', $count, DatasetPreview::dir()));
 
     return 0;
 }
