@@ -94,6 +94,28 @@ which hosts the shops imported on it, stays public.
   they are generated. Call it from a task of your project;
 - `sylius:import:list` gives `private` and `canBePrivate` for each shop.
 
+### One admin per shop
+
+```php
+use OpenColibri\Starter\Import\Extension\ChannelAdminExtension;
+use OpenColibri\Starter\Import\Extension\ImportExtensions;
+
+ImportExtensions::register(ChannelAdminExtension::NAME, new ChannelAdminExtension());
+```
+
+Each shop imported on its own channel then gets a Sylius admin restricted to that channel: it only sees and edits
+the catalog of its shop. The default channel keeps its own admins.
+
+- Its scaffold changes the app, which is why it is opt-in: a channel scope on the admin user
+  (`ImportChannelAdminAwareTrait`, wired onto `src/Entity/User/AdminUser.php`, and its migration adding
+  `import_channel_code` and `import_code_prefix` to `sylius_admin_user`), the voter, access and menu listeners and
+  product form extension that enforce it, product, variant and taxon repositories filtering by channel
+  (`config/sylius/import_channel_admin.yaml` replaces the Sylius ones), a listener removing the admins of a channel
+  `sylius:import:channel:reset` flushes, and the `import_admin_user` fixture;
+- the admin of a shop is `<slug>`; its password is generated on the first fixtures generation and kept in the
+  `project.yaml` of the shop (`admin_password`);
+- `sylius:import:list` gives the `adminPassword` of each shop.
+
 ## Progress of the long steps
 
 Generating or downloading images takes a while, and a tool running the tasks in the background (castor-api) only gets
