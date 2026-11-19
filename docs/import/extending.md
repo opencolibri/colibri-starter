@@ -46,6 +46,32 @@ listen to the `import.channel_reset` Symfony event in the Sylius app, dispatched
 (on `fixtures:load` and `sylius:import:delete`) with the channel code as subject and the `prefix` and `keep_channel`
 arguments.
 
+## Extensions shipped with the import
+
+The import ships extensions for several shops imported on their own channel in one Sylius app. None is enabled by
+default: an app built with the starter gets none of their files, fixtures or fields until its `castor.php` registers
+them.
+
+### One theme per shop
+
+```php
+use OpenColibri\Starter\Import\Extension\ImportExtensions;
+use OpenColibri\Starter\Import\Extension\ShopThemeExtension;
+
+ImportExtensions::register(ShopThemeExtension::NAME, new ShopThemeExtension());
+```
+
+Each shop then gets its own storefront theme, among the [themes installed with the theme-bundle target](../commands/themes.md#one-theme-per-channel):
+
+- the theme is kept in the `project.yaml` of the shop (`theme`), the theme of its dataset until one is picked;
+- `ShopThemeExtension::set($project, $theme)` picks one (`default` for the Sylius look): it applies it to the channel
+  of the shop right away (`castor sylius:theme:channel`), keeps it, and writes it in the fixtures when they are
+  generated. Call it from a task of your project;
+- the `import_channel_theme` fixture, copied into the app (`src/Fixture/ImportChannelThemeFixture.php`), sets it again
+  each time `sylius:import:fixtures:load` recreates the channel. A shop with no theme and no dataset theme keeps its
+  channel as it is;
+- `sylius:import:list` gives the `theme` of each shop (`default` when it has none).
+
 ## Progress of the long steps
 
 Generating or downloading images takes a while, and a tool running the tasks in the background (castor-api) only gets
