@@ -94,6 +94,7 @@ final class ShopThemeExtensionTest extends TestCase
             $extension->buildFixtures('picked', $target)['channel_theme']['sylius_fixtures']['suites']['import']['fixtures']['import_channel_theme']['options']['custom'],
         );
         static::assertSame('opencolibri/cellar', $extension->buildFixtures('from-dataset', $target)['channel_theme']['sylius_fixtures']['suites']['import']['fixtures']['import_channel_theme']['options']['custom'][0]['theme_name']);
+        static::assertSame(-100, $extension->buildFixtures('picked', $target)['channel_theme']['sylius_fixtures']['suites']['import']['fixtures']['import_channel_theme']['priority']);
         // No theme picked and no dataset theme: the channel is left alone.
         static::assertSame([], $extension->buildFixtures('plain', $target));
     }
