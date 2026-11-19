@@ -72,6 +72,28 @@ Each shop then gets its own storefront theme, among the [themes installed with t
   channel as it is;
 - `sylius:import:list` gives the `theme` of each shop (`default` when it has none).
 
+### Private shops
+
+```php
+use OpenColibri\Starter\Import\Extension\ImportExtensions;
+use OpenColibri\Starter\Import\Extension\PrivateShopExtension;
+
+ImportExtensions::register(PrivateShopExtension::NAME, new PrivateShopExtension());
+```
+
+A shop imported on its own channel can then be private: only its demo customer (its storefront login and password,
+`<slug>@shop.local`) gets into its storefront and shop API, for a demo shared with one customer. The default channel,
+which hosts the shops imported on it, stays public.
+
+- Its scaffold adds to the app a private shop field on the channel (`ImportPrivateShopAwareTrait`, wired onto
+  `src/Entity/Channel/Channel.php`, and its migration), a voter and its `access_control` rules in
+  `config/packages/security.yaml`, a login page, the `import_private_shop` fixture and the
+  `sylius:import:channel:private` command;
+- the visibility is kept in the `project.yaml` of the shop (`private: true`);
+- `PrivateShopExtension::set($project, $private)` changes it right away, keeps it, and writes it in the fixtures when
+  they are generated. Call it from a task of your project;
+- `sylius:import:list` gives `private` and `canBePrivate` for each shop.
+
 ## Progress of the long steps
 
 Generating or downloading images takes a while, and a tool running the tasks in the background (castor-api) only gets
