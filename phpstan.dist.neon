@@ -3,6 +3,7 @@ parameters:
     paths:
         - src/Core/src
         - src/Datasets/src
+        - src/Fixtures/src
         - src/Import/src
         - src/Menu/src
         - src/Plugins/src

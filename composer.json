@@ -23,6 +23,7 @@
         "symfony/ai-open-router-platform": "^0.12.0",
         "symfony/ai-platform": "^0.12.0",
         "symfony/dotenv": "^7.4|^8.0",
+        "symfony/filesystem": "^7.4|^8.0",
         "symfony/http-client": "^7.4|^8.0",
         "symfony/process": "^7.4|^8.0",
         "symfony/yaml": "^7.4|^8.0"
@@ -48,6 +49,7 @@
     "replace": {
         "opencolibri/starter-core": "self.version",
         "opencolibri/starter-datasets": "self.version",
+        "opencolibri/starter-fixtures": "self.version",
         "opencolibri/starter-import": "self.version",
         "opencolibri/starter-menu": "self.version",
         "opencolibri/starter-plugins": "self.version",
@@ -56,12 +58,13 @@
         "opencolibri/starter-upsun": "self.version"
     },
     "suggest": {
-        "jolicode/castor-api": "Expose import tasks over HTTP"
+        "jolicode/castor-api": "Expose the tasks over HTTP"
     },
     "autoload": {
         "psr-4": {
             "OpenColibri\\Starter\\Core\\": "src/Core/src/",
             "OpenColibri\\Starter\\Datasets\\": "src/Datasets/src/",
+            "OpenColibri\\Starter\\Fixtures\\": "src/Fixtures/src/",
             "OpenColibri\\Starter\\Import\\": "src/Import/src/",
             "OpenColibri\\Starter\\Menu\\": "src/Menu/src/",
             "OpenColibri\\Starter\\Plugins\\": "src/Plugins/src/",
@@ -72,6 +75,7 @@
         "files": [
             "src/Core/src/Installer/functions.php",
             "src/Datasets/src/functions.php",
+            "src/Fixtures/src/functions.php",
             "src/Import/src/constants.php",
             "src/Import/src/ImportContext.php",
             "src/Import/src/ImportBootstrap.php",
@@ -87,6 +91,7 @@
         "psr-4": {
             "OpenColibri\\Starter\\Core\\Tests\\": "src/Core/tests/",
             "OpenColibri\\Starter\\Datasets\\Tests\\": "src/Datasets/tests/",
+            "OpenColibri\\Starter\\Fixtures\\Tests\\": "src/Fixtures/tests/",
             "OpenColibri\\Starter\\Import\\Tests\\": "src/Import/tests/",
             "OpenColibri\\Starter\\Menu\\Tests\\": "src/Menu/tests/",
             "OpenColibri\\Starter\\Plugins\\Tests\\": "src/Plugins/tests/",
