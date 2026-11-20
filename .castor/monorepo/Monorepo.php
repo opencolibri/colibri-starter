@@ -120,6 +120,10 @@ final class Monorepo
      * require-dev of a dependency, so the Castor runtime does not get their Symfony and Sylius bundles. The root
      * install (tests, PHPStan) still does.
      *
+     * Their code is left out of the root package as well: it is export-ignored (see .gitattributes), its namespace goes
+     * to autoload-dev, and the root package does not replace them, so it never claims to provide a bundle it does not
+     * ship. A Symfony app gets a bundle from its own split repository.
+     *
      * @param array<string, mixed>|null $root
      *
      * @return array<string, mixed>
@@ -136,13 +140,16 @@ final class Monorepo
         $psr4 = [];
         $files = [];
         $devPsr4 = [];
+        $devFiles = [];
         $replace = [];
 
         foreach ($packages as $package) {
             $composer = $package['composer'];
-            $replace[$package['name']] = 'self.version';
+            $isBundle = self::isBundle($composer);
 
-            $isBundle = 'symfony-bundle' === ($composer['type'] ?? null);
+            if (!$isBundle) {
+                $replace[$package['name']] = 'self.version';
+            }
 
             foreach ($composer['require'] ?? [] as $dependency => $constraint) {
                 if (\in_array($dependency, $internal, true)) {
@@ -161,11 +168,19 @@ final class Monorepo
             }
 
             foreach ($composer['autoload']['psr-4'] ?? [] as $namespace => $path) {
-                $psr4[$namespace] = self::prefixPath($package['path'], $path);
+                if ($isBundle) {
+                    $devPsr4[$namespace] = self::prefixPath($package['path'], $path);
+                } else {
+                    $psr4[$namespace] = self::prefixPath($package['path'], $path);
+                }
             }
 
             foreach ($composer['autoload']['files'] ?? [] as $file) {
-                $files[] = self::prefixPath($package['path'], $file);
+                if ($isBundle) {
+                    $devFiles[] = self::prefixPath($package['path'], $file);
+                } else {
+                    $files[] = self::prefixPath($package['path'], $file);
+                }
             }
 
             foreach ($composer['autoload-dev']['psr-4'] ?? [] as $namespace => $path) {
@@ -222,7 +237,35 @@ final class Monorepo
         );
         $root['autoload-dev'] = ['psr-4' => $devPsr4 + $rootDevPsr4];
 
+        if ([] !== $devFiles) {
+            $root['autoload-dev']['files'] = $devFiles;
+        }
+
         return self::orderKeys($root);
+    }
+
+    /**
+     * @param array<string, mixed> $composer
+     */
+    public static function isBundle(array $composer): bool
+    {
+        return 'symfony-bundle' === ($composer['type'] ?? null);
+    }
+
+    /**
+     * @return list<string> the trimmed, non-empty lines of the root .gitattributes
+     */
+    private function gitAttributes(): array
+    {
+        $file = $this->rootDir . '/.gitattributes';
+
+        if (!is_file($file)) {
+            return [];
+        }
+
+        $lines = array_map(static fn(string $line): string => (string) preg_replace('/\s+/', ' ', trim($line)), file($file) ?: []);
+
+        return array_values(array_filter($lines, static fn(string $line): bool => '' !== $line));
     }
 
     public function writeRootComposer(): bool
@@ -303,6 +346,10 @@ final class Monorepo
 
             if (!is_file($this->rootDir . '/' . $package['path'] . '/README.md')) {
                 $errors[] = \sprintf('%s: README.md file is missing.', $label);
+            }
+
+            if (self::isBundle($composer) && !\in_array('/' . $package['path'] . ' export-ignore', $this->gitAttributes(), true)) {
+                $errors[] = \sprintf('%s: a Symfony bundle must be export-ignored, add "/%s export-ignore" to .gitattributes.', $label, $package['path']);
             }
         }
 

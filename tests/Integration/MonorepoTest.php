@@ -26,13 +26,29 @@ final class MonorepoTest extends TestCase
         static::assertSame('opencolibri/starter-core', $this->monorepo->packages()[0]['name']);
     }
 
-    public function testRootComposerReplacesEveryPackage(): void
+    public function testRootComposerReplacesEveryCastorPackage(): void
     {
         $replace = $this->monorepo->rootComposer()['replace'] ?? [];
 
         foreach ($this->monorepo->packages() as $package) {
+            if (Monorepo::isBundle($package['composer'])) {
+                continue;
+            }
+
             static::assertSame('self.version', $replace[$package['name']] ?? null, $package['name']);
         }
+    }
+
+    public function testTheSymfonyBundlesAreLeftOutOfTheRootPackage(): void
+    {
+        $root = $this->monorepo->rootComposer();
+        $gitAttributes = (string) file_get_contents(\dirname(__DIR__, 2) . '/.gitattributes');
+
+        // The root package does not ship the bundle (export-ignore), so it must not claim to provide it.
+        static::assertArrayNotHasKey('opencolibri/starter-sales-kit-bundle', $root['replace']);
+        static::assertArrayNotHasKey('OpenColibri\\Starter\\SalesKitBundle\\', $root['autoload']['psr-4']);
+        static::assertSame('src/SalesKitBundle/src/', $root['autoload-dev']['psr-4']['OpenColibri\\Starter\\SalesKitBundle\\'] ?? null);
+        static::assertStringContainsString("/src/SalesKitBundle export-ignore\n", $gitAttributes);
     }
 
     public function testItResolvesPackagesByShortNameOrDirectory(): void

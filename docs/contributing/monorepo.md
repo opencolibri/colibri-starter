@@ -37,6 +37,11 @@ The dependencies of a Symfony bundle (a package of type `symfony-bundle`, like t
 as a dependency, and Composer ignores the `require-dev` of a dependency, so the Castor runtime does not get their Symfony
 and Sylius bundles. `composer install` at the root still installs them, for the tests and PHPStan.
 
+A bundle is not part of `opencolibri/starter` either: its directory is `export-ignore`d in `.gitattributes`, its
+namespace goes to the root `autoload-dev` and the root package does not `replace` it, so it never claims to provide a
+bundle it does not ship. A Symfony app requires the bundle from its own split repository. `castor monorepo:validate`
+fails when a bundle is missing from `.gitattributes`.
+
 ## Monorepo tasks
 
 | Task                                   | What it does                                                                                    |
