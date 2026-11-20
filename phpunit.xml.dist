@@ -31,6 +31,9 @@
         <testsuite name="sales-kit">
             <directory>src/SalesKit/tests</directory>
         </testsuite>
+        <testsuite name="sales-kit-castor">
+            <directory>src/SalesKitCastor/tests</directory>
+        </testsuite>
         <testsuite name="themes">
             <directory>src/Themes/tests</directory>
         </testsuite>
