@@ -185,7 +185,13 @@ root with `.products-grid div:has(> a.link-reset)` (each theme does it in
 
 The code is split into packages under `src/<Package>/` (`composer.json`, `src/`, `tests/`, `resources/`). The root
 `composer.json` is generated: after changing a package `composer.json`, run `castor monorepo:merge`, then check with
-`castor monorepo:validate`. A package must never use another task package's namespace, only `OpenColibri\Starter\Core`.
+`castor monorepo:validate`. A package must never use another task package's namespace, only `OpenColibri\Starter\Core`
+and the packages its `composer.json` requires (`starter-sales-kit-castor` builds on `starter-fixtures`).
+
+Datasets: the format (`Core\Dataset\Dataset`) is the contract between `starter-dataset-builder` (builds them with AI,
+`sylius:dataset:build`), `starter-fixtures` (loads them without AI, `sylius:dataset:load`) and
+`starter-sales-kit-castor` (demo shops, `sylius:shop:*`). A built dataset is final: never call an AI or the network
+from `starter-fixtures`. See `docs/datasets/index.md`.
 
 ## Storefront slots
 

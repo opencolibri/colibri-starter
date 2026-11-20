@@ -75,16 +75,14 @@ six shelves (Single Origins, Blends, Espresso, Decaf, Brewing, Gifts), shipped a
 photo of each item generated with Ollama, on the cream paper and copper of the theme). The single origins are the ones
 of the homepage (Ethiopia Guji and Yirgacheffe, Colombia Huila, Guatemala Antigua, Brazil Cerrado), and descriptions
 carry what a coffee lover looks for: farm, altitude, process, cup notes, roast level out of five and brewing advice.
-Create a shop from it with the [import package](../import/datasets.md), into the default channel:
+Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create roastery
-castor sylius:import:fixtures:generate --project=roastery --subdomain=""
-castor sylius:import:fixtures:load --project=roastery
+castor sylius:dataset:load roastery
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the six
-shelves; `castor sylius:import:delete roastery` removes the catalog. The import keeps the products already in the
+shelves; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in the
 channel and gives the items creation dates in the past, so on a store loaded with the default fixtures the latest
 products may still show clothing: run `castor app:db:fixtures app` first to start from a store without products.
 

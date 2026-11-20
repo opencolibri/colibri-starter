@@ -82,16 +82,14 @@ house, in six aisles (Food, Treats, Toys, Accessories, Beds, Grooming & Care), s
 a photo of each product generated with Ollama on the pastel of its aisle, some with a dog or a cat). The
 products are the ones of the homepage (the bestsellers of the six aisles and the recipe of the pet passport),
 and descriptions carry what a pet parent looks for: recipe, daily portion, size, materials and care.
-Create a shop from it with the [import package](../import/datasets.md), into the default channel:
+Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create pets
-castor sylius:import:fixtures:generate --project=pets --subdomain=""
-castor sylius:import:fixtures:load --project=pets
+castor sylius:dataset:load pets
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the
-six aisles; `castor sylius:import:delete pets` removes the catalog. The import keeps the products already in
+six aisles; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in
 the channel and gives the items creation dates in the past, so on a store loaded with the default fixtures
 the latest products may still show clothing: run `castor app:db:fixtures app` first to start from a store
 without products.

@@ -75,17 +75,14 @@ and accessories from fictional brands, in six departments (Laptops, Smartphones,
 Accessories), shipped as the `tech` dataset of `opencolibri/starter-datasets` (`src/Datasets/datasets/tech/`:
 `products.yaml`, `collections.yaml`, and in `media/` a studio photo of each device generated with Ollama, on a brushed
 aluminium backdrop with a signal-orange rim light). Descriptions carry what a gadget buyer looks for: key specs,
-battery life, what is in the box and the warranty. Create a shop from it with the
-[import package](../import/datasets.md), into the default channel:
+battery life, what is in the box and the warranty. Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create tech
-castor sylius:import:fixtures:generate --project=tech --subdomain=""
-castor sylius:import:fixtures:load --project=tech
+castor sylius:dataset:load tech
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the six
-departments; `castor sylius:import:delete tech` removes the catalog. The import keeps the products already in the
+departments; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in the
 channel and gives the devices creation dates in the past, so on a store loaded with the default fixtures the latest
 products may still show clothing: run `castor app:db:fixtures app` first to start from a store without products.
 

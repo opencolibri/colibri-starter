@@ -83,16 +83,14 @@ house, on six shelves (Skincare, Makeup, Fragrance, Hair Care, Body & Wellness, 
 paper with the flowers or fruits of its formula). The products are the ones of the homepage (the bestsellers
 of the six shelves and the textures of the ritual card), and descriptions carry what a beauty shopper looks
 for: texture, key ingredients, skin type and how to use it.
-Create a shop from it with the [import package](../import/datasets.md), into the default channel:
+Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create bloom
-castor sylius:import:fixtures:generate --project=bloom --subdomain=""
-castor sylius:import:fixtures:load --project=bloom
+castor sylius:dataset:load bloom
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the
-six shelves; `castor sylius:import:delete bloom` removes the catalog. The import keeps the products already in
+six shelves; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in
 the channel and gives the items creation dates in the past, so on a store loaded with the default fixtures
 the latest products may still show clothing: run `castor app:db:fixtures app` first to start from a store
 without products.

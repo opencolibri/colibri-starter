@@ -20,8 +20,10 @@ src/
 ├── Themes/            opencolibri/starter-themes      (+ resources/)
 ├── Menu/              opencolibri/starter-menu
 ├── Datasets/          opencolibri/starter-datasets    (+ datasets/)
-├── Import/            opencolibri/starter-import      (+ resources/)
+├── Fixtures/          opencolibri/starter-fixtures    (+ resources/)
+├── DatasetBuilder/    opencolibri/starter-dataset-builder
 ├── SalesKit/          opencolibri/starter-sales-kit   (Symfony bundle)
+├── SalesKitCastor/    opencolibri/starter-sales-kit-castor (+ resources/)
 └── Upsun/             opencolibri/starter-upsun
 tests/Integration/     cross-package tests
 .castor/monorepo/      monorepo tooling (castor monorepo:*)

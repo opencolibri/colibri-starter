@@ -38,7 +38,8 @@ existing Castor project.
 | [`castor sylius:add` / `sylius:remove`](docs/commands/plugins.md) | `opencolibri/starter-plugins` |
 | [`castor sylius:theme:setup`](docs/commands/themes.md)          | `opencolibri/starter-themes`  |
 | [`castor sylius:menu:remove`](docs/commands/admin-menu.md)      | `opencolibri/starter-menu`    |
-| [`castor sylius:import:*`](docs/import/index.md)                | `opencolibri/starter-import`, `opencolibri/starter-datasets` |
+| [`castor sylius:dataset:*`](docs/datasets/index.md)             | `opencolibri/starter-fixtures`, `opencolibri/starter-dataset-builder`, `opencolibri/starter-datasets` |
+| [`castor sylius:shop:*`](docs/sales-kit/shops.md)               | `opencolibri/starter-sales-kit-castor` |
 | [`castor sylius:upsun:*`](docs/commands/upsun.md)              | `opencolibri/starter-upsun`   |
 | [Sales kit admin](src/SalesKit/README.md) (Symfony bundle)     | `opencolibri/starter-sales-kit` |
 
@@ -59,9 +60,8 @@ Read it online at [starter.opencolibri.org/docs](https://starter.opencolibri.org
   [Packages](docs/getting-started/packages.md)
 - **Commands**: [Plugins](docs/commands/plugins.md), [Themes](docs/commands/themes.md),
   [Admin menu](docs/commands/admin-menu.md), [Upsun](docs/commands/upsun.md)
-- **E-commerce import**: [Overview](docs/import/index.md), [AI-generated catalog](docs/import/ai-catalog.md),
-  [Existing website](docs/import/existing-website.md), [Fixtures](docs/import/fixtures.md), [Datasets](docs/import/datasets.md),
-  [Extending the import](docs/import/extending.md)
+- **Datasets**: [Overview](docs/datasets/index.md), [Build a dataset](docs/datasets/build.md),
+  [Extending](docs/datasets/extending.md)
 - **Extending**: [Plugins and themes](docs/extending/index.md), [App and helpers](docs/extending/toolbox.md),
   [Custom tasks](docs/extending/tasks.md)
 - **Storefront slots**: [Homepage hero](docs/storefront/hero.md), [Shop logo](docs/storefront/brand.md)

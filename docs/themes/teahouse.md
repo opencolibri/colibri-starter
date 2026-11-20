@@ -82,16 +82,14 @@ photo of each item generated with Ollama, on the rice paper of the theme, each t
 The teas are the ones of the homepage (the Darjeeling First Flush of the steeping guide, and the six families from
 Silver Needle to the Yunnan pu-erh), and descriptions carry what a tea lover looks for: garden, harvest, cup notes,
 oxidation and steeping advice.
-Create a shop from it with the [import package](../import/datasets.md), into the default channel:
+Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create teahouse
-castor sylius:import:fixtures:generate --project=teahouse --subdomain=""
-castor sylius:import:fixtures:load --project=teahouse
+castor sylius:dataset:load teahouse
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the six
-shelves; `castor sylius:import:delete teahouse` removes the catalog. The import keeps the products already in the
+shelves; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in the
 channel and gives the items creation dates in the past, so on a store loaded with the default fixtures the latest
 products may still show clothing: run `castor app:db:fixtures app` first to start from a store without products.
 
