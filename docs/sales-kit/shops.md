@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-`opencolibri/starter-sales-kit-castor` runs the demo shops of a sales kit: the admin calls its `sylius:shop:*` tasks
+`opencolibri/starter-sales-kit` runs the demo shops of a sales kit: the admin calls its `sylius:shop:*` tasks
 through castor-api, and they also work from the command line.
 
 ## A shop

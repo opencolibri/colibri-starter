@@ -20,7 +20,7 @@ final class StorefrontBrandContractTest extends TestCase
     private const CORE_SLOT_DIR = 'src/Core/resources/storefront/brand';
 
     /** Files the packages copy into the Sylius application. */
-    private const APPLICATION_DIRS = ['src/Fixtures/resources/application', 'src/SalesKitCastor/resources/application'];
+    private const APPLICATION_DIRS = ['src/Fixtures/resources/application', 'src/SalesKit/resources/application'];
 
     public function testPackagesShipNoFileAThemeAlsoShips(): void
     {

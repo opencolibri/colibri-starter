@@ -14,7 +14,7 @@ downloads nothing.
 | `opencolibri/starter-datasets`                                         | none: [ready-made datasets](#ready-made-datasets)                      |
 | `opencolibri/starter-fixtures`                                         | `sylius:dataset:list`, `sylius:dataset:load`, `sylius:dataset:unload`  |
 | [`opencolibri/starter-dataset-builder`](build.md)                      | `sylius:dataset:build`, `sylius:dataset:images`, `sylius:dataset:export`, `sylius:dataset:delete` |
-| [`opencolibri/starter-sales-kit-castor`](../sales-kit/shops.md)        | `sylius:shop:*`: demo shops created from datasets                      |
+| [`opencolibri/starter-sales-kit`](../sales-kit/shops.md)        | `sylius:shop:*`: demo shops created from datasets                      |
 
 ## Load a dataset
 

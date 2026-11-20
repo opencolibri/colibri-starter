@@ -22,8 +22,8 @@ src/
 ├── Datasets/          opencolibri/starter-datasets    (+ datasets/)
 ├── Fixtures/          opencolibri/starter-fixtures    (+ resources/)
 ├── DatasetBuilder/    opencolibri/starter-dataset-builder
-├── SalesKit/          opencolibri/starter-sales-kit   (Symfony bundle)
-├── SalesKitCastor/    opencolibri/starter-sales-kit-castor (+ resources/)
+├── SalesKit/          opencolibri/starter-sales-kit   (+ resources/)
+├── SalesKitBundle/    opencolibri/starter-sales-kit-bundle (Symfony bundle)
 └── Upsun/             opencolibri/starter-upsun
 tests/Integration/     cross-package tests
 .castor/monorepo/      monorepo tooling (castor monorepo:*)

@@ -16,13 +16,13 @@ the theme that suits them, and shares its storefront and its own Sylius admin.
 
 ```
 sales kit admin ──HTTP──▶ castor-api ──▶ Castor tasks ──▶ shared Sylius app (one channel per shop)
-(opencolibri/starter-sales-kit)          (opencolibri/starter-sales-kit-castor, …-dataset-builder, …-themes)
+(opencolibri/starter-sales-kit-bundle)   (opencolibri/starter-sales-kit, …-dataset-builder, …-themes)
 ```
 
 - **The stack** runs the shared Sylius app and [castor-api](https://github.com/jeromegxj/castor-api), which runs the
-  Castor tasks over HTTP. It installs `opencolibri/starter-sales-kit-castor`, whose [`sylius:shop:*` tasks](shops.md)
+  Castor tasks over HTTP. It installs `opencolibri/starter-sales-kit`, whose [`sylius:shop:*` tasks](shops.md)
   run the demo shops, and every theme next to each other. See [Setting up](setup.md).
-- **The admin**, `opencolibri/starter-sales-kit`, is a Symfony bundle built on Sylius Shadcn Admin UI: each team builds
+- **The admin**, `opencolibri/starter-sales-kit-bundle`, is a Symfony bundle built on Sylius Shadcn Admin UI: each team builds
   its own instance from it (users, branding, colors, extra pages). It calls castor-api for every action and follows the
   long ones (catalog generation, fixtures load, deletion) as they run. See [The admin](admin.md).
 

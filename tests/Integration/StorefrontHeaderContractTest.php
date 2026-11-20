@@ -49,7 +49,7 @@ final class StorefrontHeaderContractTest extends TestCase
 
     public function testPackagesDoNotShipHeaderHookOverrides(): void
     {
-        foreach (['Fixtures', 'SalesKitCastor'] as $package) {
+        foreach (['Fixtures', 'SalesKit'] as $package) {
             static::assertFileDoesNotExist(\dirname(__DIR__, 2) . '/src/' . $package . '/resources/application/config/sylius/twig_hooks/shop/header.yaml');
         }
     }

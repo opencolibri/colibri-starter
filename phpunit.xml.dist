@@ -28,8 +28,8 @@
         <testsuite name="sales-kit">
             <directory>src/SalesKit/tests</directory>
         </testsuite>
-        <testsuite name="sales-kit-castor">
-            <directory>src/SalesKitCastor/tests</directory>
+        <testsuite name="sales-kit-bundle">
+            <directory>src/SalesKitBundle/tests</directory>
         </testsuite>
         <testsuite name="themes">
             <directory>src/Themes/tests</directory>

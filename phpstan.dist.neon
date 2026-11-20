@@ -8,7 +8,7 @@ parameters:
         - src/Menu/src
         - src/Plugins/src
         - src/SalesKit/src
-        - src/SalesKitCastor/src
+        - src/SalesKitBundle/src
         - src/Themes/src
         - src/Upsun/src
         - .castor/monorepo

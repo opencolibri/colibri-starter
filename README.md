@@ -39,9 +39,9 @@ existing Castor project.
 | [`castor sylius:theme:setup`](docs/commands/themes.md)          | `opencolibri/starter-themes`  |
 | [`castor sylius:menu:remove`](docs/commands/admin-menu.md)      | `opencolibri/starter-menu`    |
 | [`castor sylius:dataset:*`](docs/datasets/index.md)             | `opencolibri/starter-fixtures`, `opencolibri/starter-dataset-builder`, `opencolibri/starter-datasets` |
-| [`castor sylius:shop:*`](docs/sales-kit/shops.md)               | `opencolibri/starter-sales-kit-castor` |
+| [`castor sylius:shop:*`](docs/sales-kit/shops.md)               | `opencolibri/starter-sales-kit` |
 | [`castor sylius:upsun:*`](docs/commands/upsun.md)              | `opencolibri/starter-upsun`   |
-| [Sales kit admin](src/SalesKit/README.md) (Symfony bundle)     | `opencolibri/starter-sales-kit` |
+| [Sales kit admin](src/SalesKitBundle/README.md) (Symfony bundle) | `opencolibri/starter-sales-kit-bundle` |
 
 Every package relies on `opencolibri/starter-core`; `opencolibri/starter` installs them all. See
 [Packages](docs/getting-started/packages.md).
