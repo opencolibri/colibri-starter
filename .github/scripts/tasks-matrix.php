@@ -127,8 +127,10 @@ $ignored = [
     '.gitattributes',
     'LICENSE',
     // Packages no task runs: their unit tests and PHPStan cover them.
+    'src/DatasetBuilder/',
     'src/Datasets/',
-    'src/Import/',
+    'src/Fixtures/',
+    'src/SalesKitCastor/',
     'src/Upsun/',
     // The sales kit admin bundle is never installed in the test application.
     'src/SalesKit/',

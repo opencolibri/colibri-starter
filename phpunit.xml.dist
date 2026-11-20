@@ -19,9 +19,6 @@
         <testsuite name="fixtures">
             <directory>src/Fixtures/tests</directory>
         </testsuite>
-        <testsuite name="import">
-            <directory>src/Import/tests</directory>
-        </testsuite>
         <testsuite name="menu">
             <directory>src/Menu/tests</directory>
         </testsuite>

@@ -5,7 +5,6 @@ parameters:
         - src/DatasetBuilder/src
         - src/Datasets/src
         - src/Fixtures/src
-        - src/Import/src
         - src/Menu/src
         - src/Plugins/src
         - src/SalesKit/src
