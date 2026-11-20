@@ -48,6 +48,7 @@
     },
     "replace": {
         "opencolibri/starter-core": "self.version",
+        "opencolibri/starter-dataset-builder": "self.version",
         "opencolibri/starter-datasets": "self.version",
         "opencolibri/starter-fixtures": "self.version",
         "opencolibri/starter-import": "self.version",
@@ -63,6 +64,7 @@
     "autoload": {
         "psr-4": {
             "OpenColibri\\Starter\\Core\\": "src/Core/src/",
+            "OpenColibri\\Starter\\DatasetBuilder\\": "src/DatasetBuilder/src/",
             "OpenColibri\\Starter\\Datasets\\": "src/Datasets/src/",
             "OpenColibri\\Starter\\Fixtures\\": "src/Fixtures/src/",
             "OpenColibri\\Starter\\Import\\": "src/Import/src/",
@@ -74,6 +76,21 @@
         },
         "files": [
             "src/Core/src/Installer/functions.php",
+            "src/DatasetBuilder/src/constants.php",
+            "src/DatasetBuilder/src/paths.php",
+            "src/DatasetBuilder/src/url.php",
+            "src/DatasetBuilder/src/name.php",
+            "src/DatasetBuilder/src/catalog.php",
+            "src/DatasetBuilder/src/Images/download.php",
+            "src/DatasetBuilder/src/Ai/platform.php",
+            "src/DatasetBuilder/src/Ai/enrichment.php",
+            "src/DatasetBuilder/src/Ai/grouping.php",
+            "src/DatasetBuilder/src/Ai/curation.php",
+            "src/DatasetBuilder/src/Ai/catalog.php",
+            "src/DatasetBuilder/src/Fetch/http.php",
+            "src/DatasetBuilder/src/Fetch/sitemap.php",
+            "src/DatasetBuilder/src/Fetch/fetch.php",
+            "src/DatasetBuilder/src/functions.php",
             "src/Datasets/src/functions.php",
             "src/Fixtures/src/functions.php",
             "src/Import/src/constants.php",
@@ -90,6 +107,7 @@
     "autoload-dev": {
         "psr-4": {
             "OpenColibri\\Starter\\Core\\Tests\\": "src/Core/tests/",
+            "OpenColibri\\Starter\\DatasetBuilder\\Tests\\": "src/DatasetBuilder/tests/",
             "OpenColibri\\Starter\\Datasets\\Tests\\": "src/Datasets/tests/",
             "OpenColibri\\Starter\\Fixtures\\Tests\\": "src/Fixtures/tests/",
             "OpenColibri\\Starter\\Import\\Tests\\": "src/Import/tests/",

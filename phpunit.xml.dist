@@ -10,8 +10,14 @@
         <testsuite name="core">
             <directory>src/Core/tests</directory>
         </testsuite>
+        <testsuite name="dataset-builder">
+            <directory>src/DatasetBuilder/tests</directory>
+        </testsuite>
         <testsuite name="datasets">
             <directory>src/Datasets/tests</directory>
+        </testsuite>
+        <testsuite name="fixtures">
+            <directory>src/Fixtures/tests</directory>
         </testsuite>
         <testsuite name="import">
             <directory>src/Import/tests</directory>

@@ -2,6 +2,7 @@ parameters:
     level: 0
     paths:
         - src/Core/src
+        - src/DatasetBuilder/src
         - src/Datasets/src
         - src/Fixtures/src
         - src/Import/src
