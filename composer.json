@@ -47,8 +47,9 @@
     },
     "replace": {
         "opencolibri/starter-core": "self.version",
+        "opencolibri/starter-dataset-builder": "self.version",
         "opencolibri/starter-datasets": "self.version",
-        "opencolibri/starter-import": "self.version",
+        "opencolibri/starter-fixtures": "self.version",
         "opencolibri/starter-menu": "self.version",
         "opencolibri/starter-plugins": "self.version",
         "opencolibri/starter-sales-kit": "self.version",
@@ -56,13 +57,14 @@
         "opencolibri/starter-upsun": "self.version"
     },
     "suggest": {
-        "jolicode/castor-api": "Expose import tasks over HTTP"
+        "jolicode/castor-api": "Expose the tasks over HTTP"
     },
     "autoload": {
         "psr-4": {
             "OpenColibri\\Starter\\Core\\": "src/Core/src/",
+            "OpenColibri\\Starter\\DatasetBuilder\\": "src/DatasetBuilder/src/",
             "OpenColibri\\Starter\\Datasets\\": "src/Datasets/src/",
-            "OpenColibri\\Starter\\Import\\": "src/Import/src/",
+            "OpenColibri\\Starter\\Fixtures\\": "src/Fixtures/src/",
             "OpenColibri\\Starter\\Menu\\": "src/Menu/src/",
             "OpenColibri\\Starter\\Plugins\\": "src/Plugins/src/",
             "OpenColibri\\Starter\\SalesKit\\": "src/SalesKit/src/",
@@ -71,14 +73,26 @@
         },
         "files": [
             "src/Core/src/Installer/functions.php",
+            "src/DatasetBuilder/src/constants.php",
+            "src/DatasetBuilder/src/paths.php",
+            "src/DatasetBuilder/src/url.php",
+            "src/DatasetBuilder/src/name.php",
+            "src/DatasetBuilder/src/catalog.php",
+            "src/DatasetBuilder/src/Images/download.php",
+            "src/DatasetBuilder/src/Ai/platform.php",
+            "src/DatasetBuilder/src/Ai/enrichment.php",
+            "src/DatasetBuilder/src/Ai/grouping.php",
+            "src/DatasetBuilder/src/Ai/curation.php",
+            "src/DatasetBuilder/src/Ai/catalog.php",
+            "src/DatasetBuilder/src/Fetch/http.php",
+            "src/DatasetBuilder/src/Fetch/sitemap.php",
+            "src/DatasetBuilder/src/Fetch/fetch.php",
+            "src/DatasetBuilder/src/functions.php",
             "src/Datasets/src/functions.php",
-            "src/Import/src/constants.php",
-            "src/Import/src/ImportContext.php",
-            "src/Import/src/ImportBootstrap.php",
-            "src/Import/src/bootstrap.php",
-            "src/Import/src/functions.php",
+            "src/Fixtures/src/functions.php",
             "src/Menu/src/functions.php",
             "src/Plugins/src/functions.php",
+            "src/SalesKit/src/functions.php",
             "src/Themes/src/functions.php",
             "src/Upsun/src/functions.php"
         ]
@@ -86,11 +100,14 @@
     "autoload-dev": {
         "psr-4": {
             "OpenColibri\\Starter\\Core\\Tests\\": "src/Core/tests/",
+            "OpenColibri\\Starter\\DatasetBuilder\\Tests\\": "src/DatasetBuilder/tests/",
             "OpenColibri\\Starter\\Datasets\\Tests\\": "src/Datasets/tests/",
-            "OpenColibri\\Starter\\Import\\Tests\\": "src/Import/tests/",
+            "OpenColibri\\Starter\\Fixtures\\Tests\\": "src/Fixtures/tests/",
             "OpenColibri\\Starter\\Menu\\Tests\\": "src/Menu/tests/",
             "OpenColibri\\Starter\\Plugins\\Tests\\": "src/Plugins/tests/",
             "OpenColibri\\Starter\\SalesKit\\Tests\\": "src/SalesKit/tests/",
+            "OpenColibri\\Starter\\SalesKitBundle\\": "src/SalesKitBundle/src/",
+            "OpenColibri\\Starter\\SalesKitBundle\\Tests\\": "src/SalesKitBundle/tests/",
             "OpenColibri\\Starter\\Themes\\Tests\\": "src/Themes/tests/",
             "OpenColibri\\Starter\\Upsun\\Tests\\": "src/Upsun/tests/",
             "OpenColibri\\Starter\\Tests\\": "tests/",

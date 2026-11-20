@@ -20,8 +20,10 @@ src/
 ├── Themes/            opencolibri/starter-themes      (+ resources/)
 ├── Menu/              opencolibri/starter-menu
 ├── Datasets/          opencolibri/starter-datasets    (+ datasets/)
-├── Import/            opencolibri/starter-import      (+ resources/)
-├── SalesKit/          opencolibri/starter-sales-kit   (Symfony bundle)
+├── Fixtures/          opencolibri/starter-fixtures    (+ resources/)
+├── DatasetBuilder/    opencolibri/starter-dataset-builder
+├── SalesKit/          opencolibri/starter-sales-kit   (+ resources/)
+├── SalesKitBundle/    opencolibri/starter-sales-kit-bundle (Symfony bundle)
 └── Upsun/             opencolibri/starter-upsun
 tests/Integration/     cross-package tests
 .castor/monorepo/      monorepo tooling (castor monorepo:*)
@@ -34,6 +36,11 @@ The dependencies of a Symfony bundle (a package of type `symfony-bundle`, like t
 `require-dev` instead, listed in `extra.monorepo.bundle-dependencies`: `castor.composer.json` installs the root package
 as a dependency, and Composer ignores the `require-dev` of a dependency, so the Castor runtime does not get their Symfony
 and Sylius bundles. `composer install` at the root still installs them, for the tests and PHPStan.
+
+A bundle is not part of `opencolibri/starter` either: its directory is `export-ignore`d in `.gitattributes`, its
+namespace goes to the root `autoload-dev` and the root package does not `replace` it, so it never claims to provide a
+bundle it does not ship. A Symfony app requires the bundle from its own split repository. `castor monorepo:validate`
+fails when a bundle is missing from `.gitattributes`.
 
 ## Monorepo tasks
 

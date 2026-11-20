@@ -47,8 +47,10 @@ final class StorefrontHeaderContractTest extends TestCase
         static::assertSame([], $offenders, 'The header category menu and its mobile toggle belong to the themes.');
     }
 
-    public function testImportDoesNotShipHeaderHookOverrides(): void
+    public function testPackagesDoNotShipHeaderHookOverrides(): void
     {
-        static::assertFileDoesNotExist(\dirname(__DIR__, 2) . '/src/Import/resources/templates/application/config/sylius/twig_hooks/shop/header.yaml');
+        foreach (['Fixtures', 'SalesKit'] as $package) {
+            static::assertFileDoesNotExist(\dirname(__DIR__, 2) . '/src/' . $package . '/resources/application/config/sylius/twig_hooks/shop/header.yaml');
+        }
     }
 }

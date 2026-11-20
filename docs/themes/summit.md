@@ -85,17 +85,15 @@ Footwear, Clothing, Climbing, Camping, Accessories), shipped as the `outdoor` da
 (`src/Datasets/datasets/outdoor/`: `products.yaml`, `collections.yaml`, and in `media/` a 3:4 photograph of each
 product out in the mountains, generated with Ollama). Descriptions carry what a hiker or a climber looks for: weight,
 capacity, materials, sizes and certifications. The dataset names no activity of the theme, so it suits any outdoor
-or mountain sports store. Create a shop from it with the [import package](../import/datasets.md), into the default
+or mountain sports store. Load it with [`sylius:dataset:load`](../datasets/index.md), into the default
 channel:
 
 ```bash
-castor sylius:import:shop:create outdoor
-castor sylius:import:fixtures:generate --project=outdoor --subdomain=""
-castor sylius:import:fixtures:load --project=outdoor
+castor sylius:dataset:load outdoor
 ```
 
 No AI call is made: `products.yaml` points at the photographs of the dataset `media/`. The shop menu then lists the
-six categories; `castor sylius:import:delete outdoor` removes the catalog. The import keeps the products already in
+six categories; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in
 the channel and gives the gear creation dates in the past, so on a store loaded with the default fixtures the latest
 products may still show clothing: run `castor app:db:fixtures app` first to start from a store without products.
 

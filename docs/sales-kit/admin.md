@@ -2,7 +2,7 @@
 title: The admin
 description: The shops, datasets and settings a sales team handles in the sales kit admin.
 sidebar:
-  order: 2
+  order: 3
 ---
 
 ## Shops

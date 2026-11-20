@@ -74,17 +74,14 @@ from fictional brands, on six shelves (Consoles, Games, Handhelds, Controllers, 
 `retro-gaming` dataset of `opencolibri/starter-datasets` (`src/Datasets/datasets/retro-gaming/`: `products.yaml`,
 `collections.yaml`, and in `media/` a photo of each item generated with Ollama, under the magenta and cyan neon lights
 of the theme on a console-blue backdrop). Descriptions carry what a retro collector looks for: condition and grading,
-region, what is in the box and the refurbishing done. Create a shop from it with the
-[import package](../import/datasets.md), into the default channel:
+region, what is in the box and the refurbishing done. Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create retro-gaming
-castor sylius:import:fixtures:generate --project=retro-gaming --subdomain=""
-castor sylius:import:fixtures:load --project=retro-gaming
+castor sylius:dataset:load retro-gaming
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the six
-shelves; `castor sylius:import:delete retro-gaming` removes the catalog. The import keeps the products already in the
+shelves; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in the
 channel and gives the items creation dates in the past, so on a store loaded with the default fixtures the latest
 products may still show clothing: run `castor app:db:fixtures app` first to start from a store without products.
 

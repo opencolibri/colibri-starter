@@ -83,17 +83,14 @@ The screenshots above show a demo catalog of eighteen pieces from a fictional ho
 `opencolibri/starter-datasets` (`src/Datasets/datasets/home/`: `products.yaml`, `collections.yaml`, and in `media/` a photo
 of each piece generated with Ollama, in the same sunlit room with limewashed walls). The pieces echo the homepage (the
 materials of the library, the palette of the moodboard), and descriptions carry what a home buyer looks for:
-dimensions, materials, delivery and care advice. Create a shop from it with the
-[import package](../import/datasets.md), into the default channel:
+dimensions, materials, delivery and care advice. Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create home
-castor sylius:import:fixtures:generate --project=home --subdomain=""
-castor sylius:import:fixtures:load --project=home
+castor sylius:dataset:load home
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the six
-departments; `castor sylius:import:delete home` removes the catalog. The import keeps the products already in the
+departments; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in the
 channel and gives the pieces creation dates in the past, so on a store loaded with the default fixtures the latest
 products may still show clothing: run `castor app:db:fixtures app` first to start from a store without products.
 

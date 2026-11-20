@@ -71,7 +71,7 @@ castor sylius:init --no-interaction \
 ## Next steps
 
 Shape your store with the commands: [add plugins](../commands/plugins.md), [switch the theme](../commands/themes.md),
-[clean up the Admin menu](../commands/admin-menu.md), or [import a catalog](../import/index.md).
+[clean up the Admin menu](../commands/admin-menu.md), or [load a catalog](../datasets/index.md).
 
 ## In an existing Castor project
 

@@ -81,16 +81,14 @@ each aisle, generated with Ollama on white, like a trade catalogue: the aisle ph
 of the department cards). Products are sold by the pack (a box of 5 reams, a
 pack of 25 cartons, a box of 100 gloves) and descriptions carry what a professional buyer looks for: the
 pack size, a reference, the **price breaks** by quantity and the delivery terms.
-Create a shop from it with the [import package](../import/datasets.md), into the default channel:
+Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create depot
-castor sylius:import:fixtures:generate --project=depot --subdomain=""
-castor sylius:import:fixtures:load --project=depot
+castor sylius:dataset:load depot
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the
-six aisles; `castor sylius:import:delete depot` removes the catalog. The import keeps the products already in
+six aisles; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in
 the channel and gives the items creation dates in the past, so on a store loaded with the default fixtures
 the latest products may still show clothing: run `castor app:db:fixtures app` first to start from a store
 without products.

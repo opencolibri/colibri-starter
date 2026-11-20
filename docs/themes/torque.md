@@ -89,16 +89,14 @@ and of each department, generated with Ollama on a pale grey studio backdrop: th
 taxon images of the tiles). Each title ends with its part reference (`— TQ-BD288V`), and the descriptions carry
 what a mechanic looks for: dimensions, bolt pattern, load and speed ratings, approvals (ECE R90, ACEA, EN),
 fitment notes and trade pack sizes.
-Create a shop from it with the [import package](../import/datasets.md), into the default channel:
+Load it with [`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create automotive
-castor sylius:import:fixtures:generate --project=automotive --subdomain=""
-castor sylius:import:fixtures:load --project=automotive
+castor sylius:dataset:load automotive
 ```
 
 No AI call is made: `products.yaml` points at the photos of the dataset `media/`. The shop menu then lists the
-six departments; `castor sylius:import:delete automotive` removes the catalog. The import keeps the products
+six departments; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products
 already in the channel, so on a store loaded with the default fixtures the latest products may still show
 clothing: run `castor app:db:fixtures app` first to start from a store without products.
 

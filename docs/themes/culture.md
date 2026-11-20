@@ -73,17 +73,15 @@ Music Instruments, Collectibles), shipped as the `culture` dataset of `opencolib
 on the coloured paper of its shelf and a photo of each shelf, generated with Ollama). Three house universes run
 across the shelves, for thematic merchandising: the Ashfall saga (the novel, the strategy game and the
 collectible dragon), Neon Koi (the manga and its enamel pins) and Starfall Odyssey (the collector's edition and
-its art print). Create a shop from it with the [import package](../import/datasets.md), into the default
+its art print). Load it with [`sylius:dataset:load`](../datasets/index.md), into the default
 channel:
 
 ```bash
-castor sylius:import:shop:create culture
-castor sylius:import:fixtures:generate --project=culture --subdomain=""
-castor sylius:import:fixtures:load --project=culture
+castor sylius:dataset:load culture
 ```
 
 No AI call is made: `products.yaml` and `collections.yaml` point at the photos of the dataset `media/`. The shop
-menu then lists the six shelves; `castor sylius:import:delete culture` removes the catalog. The import keeps the
+menu then lists the six shelves; `castor sylius:dataset:unload` removes the catalog. Loading keeps the
 products already in the channel and gives the items creation dates in the past, so on a store loaded with the
 default fixtures the latest products may still show clothing: run `castor app:db:fixtures app` first to start
 from a store without products.

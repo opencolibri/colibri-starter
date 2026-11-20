@@ -11,7 +11,7 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * The shop identity (logo) is a slot owned by opencolibri/starter-core. These checks
- * keep the import from shipping templates at paths themes write to: a theme
+ * keep the catalog fixtures and the sales kit from shipping templates at paths themes write to: a theme
  * installer overwrites them and a theme remover deletes them.
  */
 #[CoversNothing]
@@ -19,9 +19,10 @@ final class StorefrontBrandContractTest extends TestCase
 {
     private const CORE_SLOT_DIR = 'src/Core/resources/storefront/brand';
 
-    private const IMPORT_APPLICATION_DIR = 'src/Import/resources/templates/application';
+    /** Files the packages copy into the Sylius application. */
+    private const APPLICATION_DIRS = ['src/Fixtures/resources/application', 'src/SalesKit/resources/application'];
 
-    public function testImportShipsNoFileAThemeAlsoShips(): void
+    public function testPackagesShipNoFileAThemeAlsoShips(): void
     {
         $root = \dirname(__DIR__, 2);
         $themeFiles = [];
@@ -33,7 +34,7 @@ final class StorefrontBrandContractTest extends TestCase
 
         $collisions = [];
 
-        foreach ((new Finder())->files()->in($root . '/' . self::IMPORT_APPLICATION_DIR) as $file) {
+        foreach ((new Finder())->files()->in(array_map(static fn(string $dir): string => $root . '/' . $dir, self::APPLICATION_DIRS)) as $file) {
             if (isset($themeFiles[$file->getRelativePathname()])) {
                 $collisions[] = $file->getRelativePathname();
             }

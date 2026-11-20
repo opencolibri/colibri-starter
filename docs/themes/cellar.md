@@ -88,17 +88,15 @@ The screenshots above show a demo catalog of seventeen wines from fictional esta
 Burgundy, Champagne, Rhône Valley, Loire Valley, Alsace, Provence), shipped as the `cellar` dataset of
 `opencolibri/starter-datasets` (`src/Datasets/datasets/cellar/`: `products.yaml`, `collections.yaml`, and in `media/` a
 photo of each bottle: its shape, glass, capsule and label, on a transparent background so it stands whole in the
-parchment niches). Descriptions carry the tasting notes, grapes, ageing and serving advice. Create a shop from it with
-the [import package](../import/datasets.md), into the default channel:
+parchment niches). Descriptions carry the tasting notes, grapes, ageing and serving advice. Load it with
+[`sylius:dataset:load`](../datasets/index.md), into the default channel:
 
 ```bash
-castor sylius:import:shop:create cellar
-castor sylius:import:fixtures:generate --project=cellar --subdomain=""
-castor sylius:import:fixtures:load --project=cellar
+castor sylius:dataset:load cellar
 ```
 
 No AI call is made: `products.yaml` points at the bottles of the dataset `media/`. The shop menu then lists the seven
-regions; `castor sylius:import:delete cellar` removes the catalog. The import keeps the products already in the channel
+regions; `castor sylius:dataset:unload` removes the catalog. Loading keeps the products already in the channel
 and gives the wines creation dates in the past, so on a store loaded with the default fixtures the latest products may
 still show clothing: run `castor app:db:fixtures app` first to start from a store without
 products.

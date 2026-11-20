@@ -10,11 +10,14 @@
         <testsuite name="core">
             <directory>src/Core/tests</directory>
         </testsuite>
+        <testsuite name="dataset-builder">
+            <directory>src/DatasetBuilder/tests</directory>
+        </testsuite>
         <testsuite name="datasets">
             <directory>src/Datasets/tests</directory>
         </testsuite>
-        <testsuite name="import">
-            <directory>src/Import/tests</directory>
+        <testsuite name="fixtures">
+            <directory>src/Fixtures/tests</directory>
         </testsuite>
         <testsuite name="menu">
             <directory>src/Menu/tests</directory>
@@ -24,6 +27,9 @@
         </testsuite>
         <testsuite name="sales-kit">
             <directory>src/SalesKit/tests</directory>
+        </testsuite>
+        <testsuite name="sales-kit-bundle">
+            <directory>src/SalesKitBundle/tests</directory>
         </testsuite>
         <testsuite name="themes">
             <directory>src/Themes/tests</directory>
