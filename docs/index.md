@@ -52,7 +52,8 @@ The agent spends its tokens on what is specific to your project, and the repetit
 
 The built-in plugins and themes are only a starting point. Register your own with a PHP attribute in your
 `castor.php` and they show up in the same commands, interactive prompts included. See
-[Extending](extending/index.md).
+[Your own plugins](commands/custom-plugins.md), [Your own themes](themes/custom-themes.md) and
+[Your own tasks](commands/custom-tasks.md).
 
 ## Themes
 
@@ -96,11 +97,11 @@ See [Sales kit](sales-kit/index.md) to set one up.
 - [Installation](getting-started/installation.md): start a new project, or add Colibri Starter to an existing one.
 - [Packages](getting-started/packages.md): what each `opencolibri/starter-*` package brings.
 - Commands: [plugins](commands/plugins.md), [themes](commands/themes.md), [Admin menu](commands/admin-menu.md),
-  [Upsun](commands/upsun.md).
-- [Themes](themes/index.md): every storefront theme, by category, with its screenshots.
+  [Upsun](commands/upsun.md), and your own [plugins](commands/custom-plugins.md) and [tasks](commands/custom-tasks.md).
+- [App and helpers](getting-started/toolbox.md): the toolbox of your own plugins, themes and tasks.
+- [Themes](themes/index.md): every storefront theme, by category, with its screenshots, and [your own](themes/custom-themes.md).
 - [Datasets](datasets/index.md): load a ready-made catalog, or build one with AI from a description or an existing website.
 - [Storefront slots](storefront/hero.md): how themes and packages share the homepage hero and the shop logo.
 - [Sales kit](sales-kit/index.md): run demo shops for your prospects, with an admin for your sales team.
-- [Extending](extending/index.md): register your own plugins, themes and tasks.
 - [Contributing](contributing/monorepo.md): the monorepo, its tasks, its release process, and
   [one Docker stack per worktree](contributing/worktrees.md).

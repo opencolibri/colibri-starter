@@ -68,6 +68,6 @@ target. Only the themes shipped with `opencolibri/starter-themes` support it.
 
 ## Your own themes
 
-You can [register your own themes](../extending/index.md) with the `AsThemeInstaller` and `AsThemeRemover` attributes.
+You can [register your own themes](../themes/custom-themes.md) with the `AsThemeInstaller` and `AsThemeRemover` attributes.
 A theme reads the shared [hero](../storefront/hero.md) and [brand](../storefront/brand.md) slots, so the data other
 packages contribute (an imported shop's logo, for instance) shows up in it.

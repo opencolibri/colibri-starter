@@ -58,5 +58,5 @@ castor sylius:remove invoicing cms
 
 ## Your own plugins
 
-You can [register your own plugins](../extending/index.md) with the `AsPluginInstaller` and `AsPluginRemover`
+You can [register your own plugins](custom-plugins.md) with the `AsPluginInstaller` and `AsPluginRemover`
 attributes.

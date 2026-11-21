@@ -57,14 +57,17 @@ Every package relies on `opencolibri/starter-core`; `opencolibri/starter` instal
 Read it online at [starter.opencolibri.org/docs](https://starter.opencolibri.org/docs/), or here on GitHub:
 
 - **Getting started**: [Introduction](docs/index.md), [Installation](docs/getting-started/installation.md),
-  [Packages](docs/getting-started/packages.md)
+  [Packages](docs/getting-started/packages.md), [App and helpers](docs/getting-started/toolbox.md)
 - **Commands**: [Plugins](docs/commands/plugins.md), [Themes](docs/commands/themes.md),
-  [Admin menu](docs/commands/admin-menu.md), [Upsun](docs/commands/upsun.md)
+  [Admin menu](docs/commands/admin-menu.md), [Upsun](docs/commands/upsun.md),
+  [Your own plugins](docs/commands/custom-plugins.md), [Your own tasks](docs/commands/custom-tasks.md)
+- **Themes**: [All themes](docs/themes/index.md), [Light and dark schemes](docs/themes/color-schemes.md),
+  [Header layout](docs/themes/header-layout.md), [Your own themes](docs/themes/custom-themes.md)
 - **Datasets**: [Overview](docs/datasets/index.md), [Build a dataset](docs/datasets/build.md),
   [Extending](docs/datasets/extending.md)
-- **Extending**: [Plugins and themes](docs/extending/index.md), [App and helpers](docs/extending/toolbox.md),
-  [Custom tasks](docs/extending/tasks.md)
 - **Storefront slots**: [Homepage hero](docs/storefront/hero.md), [Shop logo](docs/storefront/brand.md)
+- **Sales kit**: [Overview](docs/sales-kit/index.md), [Demo shops](docs/sales-kit/shops.md),
+  [The admin](docs/sales-kit/admin.md), [Setting up](docs/sales-kit/setup.md)
 - **Contributing**: [Monorepo](docs/contributing/monorepo.md), [Releasing](docs/contributing/releasing.md),
   [Theme screenshots](docs/contributing/screenshots.md), [Theme accessibility](docs/contributing/accessibility.md)
 

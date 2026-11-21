@@ -2,8 +2,11 @@
 title: App and helpers
 description: The App instance and the helpers available to your installers, removers and tasks.
 sidebar:
-  order: 2
+  order: 3
 ---
+
+Your own [plugins](../commands/custom-plugins.md), [themes](../themes/custom-themes.md) and
+[tasks](../commands/custom-tasks.md) build on the same toolbox as the built-in ones.
 
 ## The App instance
 
@@ -18,7 +21,7 @@ Installers, removers and tasks receive the targeted Sylius application as a `Ope
 | `hostname()`  | Shop hostname (`subdomain.domain` or apex), `null` when no domain is configured    |
 
 > **Note:** The `sylius:*` tasks build the `App` with the service name and the application directory only, so
-> `domain()` / `subdomain()` / `hostname()` currently return `null` unless the task passes them (import does).
+> `domain()` / `subdomain()` / `hostname()` currently return `null` unless the task passes them (the dataset and demo shop tasks do).
 
 ## Helpers
 
@@ -57,7 +60,7 @@ does not cover.
 
 ## Runner
 
-`Docker::run()` (and the import tasks) run their commands in the `{app}-builder` Docker Compose service by default.
+`Docker::run()` (and the dataset and demo shop tasks) run their commands in the `{app}-builder` Docker Compose service by default.
 Set `COLIBRI_STARTER_RUNNER=local` to run them directly in the application directory instead, for instance when Castor
 runs on a server without Docker or inside a container that already has the application runtime:
 
