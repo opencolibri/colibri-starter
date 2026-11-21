@@ -75,6 +75,22 @@ castor sylius:theme:setup lagoon
 
 Browse [all the themes](themes/index.md), by category.
 
+## Sales kit
+
+Agencies and integrators show Sylius to a prospect on a shop that looks like theirs. The sales kit runs many demo shops
+in one Sylius app, each on its own subdomain, and gives the sales team an admin to run them without a developer:
+
+- **A shop per prospect in a few clicks**, from a [ready-made dataset](datasets/index.md#ready-made-datasets) (wine
+  cellar, groceries, tech, outdoor gear…) or a catalog [built with AI](datasets/build.md), from a description or the
+  prospect's own website.
+- **Its look**: one of the storefront themes, the prospect's logo and banner images.
+- **Ready to share**: a demo customer account, a Sylius admin that only sees this shop, and an optional private mode so
+  only the prospect gets in.
+
+[![The shops of a sales kit admin](images/sales-kit-shops.webp)](sales-kit/index.md)
+
+See [Sales kit](sales-kit/index.md) to set one up.
+
 ## Where to go next
 
 - [Installation](getting-started/installation.md): start a new project, or add Colibri Starter to an existing one.
@@ -83,7 +99,8 @@ Browse [all the themes](themes/index.md), by category.
   [Upsun](commands/upsun.md).
 - [Themes](themes/index.md): every storefront theme, by category, with its screenshots.
 - [Datasets](datasets/index.md): load a ready-made catalog, or build one with AI from a description or an existing website.
-- [Extending](extending/index.md): register your own plugins, themes and tasks.
 - [Storefront slots](storefront/hero.md): how themes and packages share the homepage hero and the shop logo.
+- [Sales kit](sales-kit/index.md): run demo shops for your prospects, with an admin for your sales team.
+- [Extending](extending/index.md): register your own plugins, themes and tasks.
 - [Contributing](contributing/monorepo.md): the monorepo, its tasks, its release process, and
   [one Docker stack per worktree](contributing/worktrees.md).
