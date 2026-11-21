@@ -1,8 +1,8 @@
 ---
-title: Custom tasks
+title: Your own tasks
 description: Add your own tasks to the Sylius service, and hook into the Sylius installer.
 sidebar:
-  order: 3
+  order: 7
 ---
 
 Every task package registers its tasks in the core `TaskProviderRegistry`. You can do the same from your
