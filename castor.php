@@ -35,6 +35,8 @@ use function worktree\storefront_url;
 import(__DIR__ . '/.castor/app');
 import(__DIR__ . '/.castor/monorepo');
 import(__DIR__ . '/.castor/worktree');
+// castor-api: runs the #[AsApi] tasks over HTTP, for the dev-kit admin (castor api:serve-development).
+import('composer://jeromegxj/castor-api');
 
 #[AsContext(default: true)]
 function default_context(): Context

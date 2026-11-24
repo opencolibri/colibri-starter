@@ -16,6 +16,12 @@
         <testsuite name="datasets">
             <directory>src/Datasets/tests</directory>
         </testsuite>
+        <testsuite name="dev-kit">
+            <directory>src/DevKit/tests</directory>
+        </testsuite>
+        <testsuite name="dev-kit-bundle">
+            <directory>src/DevKitBundle/tests</directory>
+        </testsuite>
         <testsuite name="fixtures">
             <directory>src/Fixtures/tests</directory>
         </testsuite>

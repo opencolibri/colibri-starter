@@ -3,7 +3,8 @@
         "castor-php/docker": "^0.10",
         "castor-php/php-qa": "^0.3.0",
         "opencolibri/starter": "@dev",
-        "nikic/php-parser": "^5.8"
+        "nikic/php-parser": "^5.8",
+        "jeromegxj/castor-api": "^0.1"
     },
     "repositories": [
         {

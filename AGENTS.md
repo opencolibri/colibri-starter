@@ -193,6 +193,14 @@ Datasets: the format (`Core\Dataset\Dataset`) is the contract between `starter-d
 `starter-sales-kit` (demo shops, `sylius:shop:*`). A built dataset is final: never call an AI or the network
 from `starter-fixtures`. See `docs/datasets/index.md`.
 
+## Dev-kit
+
+`starter.yaml` (ignored by git in this repository) holds the wanted state of the local shop: `castor dev-kit:apply`
+changes only what differs from the running instance (`--dry-run` shows the plan), `castor dev-kit:status` reads it.
+Its admin, `src/DevKitBundle` (duplicated from the sales kit bundle, kept separate on purpose), calls the tasks
+through castor-api: `castor api:serve-development` (http://127.0.0.1:8080).
+The loaded dataset and the plugins it changed are recorded in `app/var/dev-kit/state.json`. See `docs/dev-kit/index.md`.
+
 ## Storefront slots
 
 The homepage hero is a shared slot owned by core: themes ship `templates/shop/homepage/hero.html.twig`, packages feed

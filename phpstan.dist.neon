@@ -4,6 +4,8 @@ parameters:
         - src/Core/src
         - src/DatasetBuilder/src
         - src/Datasets/src
+        - src/DevKit/src
+        - src/DevKitBundle/src
         - src/Fixtures/src
         - src/Menu/src
         - src/Plugins/src
