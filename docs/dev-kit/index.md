@@ -103,4 +103,6 @@ dev-kit records in `var/dev-kit/state.json` of the app:
   plan warns about it.
 - A currency added without an exchange rate shows the prices of the base currency, unconverted. Add the rates in the
   Sylius admin.
-- The channel is read and changed in SQL: PostgreSQL only, like the Docker stack.
+- The channel is read and changed by `sylius:dev-kit:channel`, a console command the dev-kit copies into the app
+  (`src/Command/DevKitChannelCommand.php`, refreshed before each use: do not change it). It goes through the Sylius
+  repositories, so it works on MySQL as well as PostgreSQL.
