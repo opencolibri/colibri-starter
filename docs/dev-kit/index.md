@@ -93,7 +93,8 @@ dev-kit records in `var/dev-kit/state.json` of the app:
 - the loaded dataset, once the dev-kit loads one;
 - a theme setup that stopped halfway (its hooks are written before its assets build): the theme reads as unknown, and
   the next apply sets it up again;
-- the installed plugins, once the dev-kit changes them. Before that, they are detected from `composer.json`. From
+- the installed plugins, once the dev-kit changes them. Before that, they are detected from `composer.json`, through
+  the Composer package each installer declares ([`package`](../commands/custom-plugins.md), your own plugins too). From
   then on, the record wins: a plugin whose install stopped halfway is in `composer.json`, yet not installed, and the
   next `dev-kit:apply` installs it again.
 
