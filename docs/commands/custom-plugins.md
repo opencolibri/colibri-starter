@@ -18,7 +18,7 @@ function or on a class.
 
 | Attribute                                           | Command                       | Called when                       |
 |-----------------------------------------------------|-------------------------------|-----------------------------------|
-| `#[AsPluginInstaller(name: '…', description: '…', package: '…')]` | `castor sylius:add <name>`    | `sylius:add` picks the plugin     |
+| `#[AsPluginInstaller(name: '…', description: '…', package: '…', group: '…')]` | `castor sylius:add <name>`    | `sylius:add` picks the plugin     |
 | `#[AsPluginRemover(name: '…', description: '…')]`   | `castor sylius:remove <name>` | `sylius:remove` picks the plugin  |
 
 `name` is the identifier you type on the command line, so keep it shell friendly: lowercase letters and underscores.
@@ -27,7 +27,12 @@ The optional `description` is displayed next to the name in the interactive prom
 `sylius:remove`. Omit it and the plugin is listed by its name alone.
 
 The optional `package` of an installer is the Composer package the plugin requires: the [dev-kit](../dev-kit/index.md)
-reads it to tell from `composer.json` whether the plugin is installed. Omit it for a plugin that requires no package.
+reads it to tell from `composer.json` whether the plugin is installed, and the interactive prompt of `sylius:add` checks
+the installed plugins. Omit it for a plugin that requires no package.
+
+The optional `group` of an installer puts the plugin in a family: with `GroupedPluginInstallerInterface::PAYMENT`
+(`'payment'`), your payment gateway is offered next to Stripe, Mollie and PayPal when `castor docker:service:install
+sylius` asks which payment gateways to add. A class implements `GroupedPluginInstallerInterface` for the same result.
 
 ## Declaring a plugin
 
