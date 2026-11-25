@@ -25,17 +25,24 @@ or an instance adds its own pages (`opencolibri_dev_kit.pages`, see the README o
 **Apply** runs it. The run is followed in the tasks panel, step by step, and the page reloads once it finishes. The
 history lists every state an apply brought the shop to, and plans the way back to any of them.
 
-The admin calls the `dev-kit:*` tasks through [castor-api](https://github.com/jeromegxj/castor-api), which this
-repository imports (`castor.php`): start it at the root of the project, next to the Sylius stack.
+`castor dev-kit:init` installs it (`--no-admin` to skip it): a small Symfony app (AssetMapper, Tailwind) in the
+`dev-kit/` directory of the project, run as a Symfony service of the stack next to the Sylius one
+(`castor docker:service:install dev-kit` does the same alone). It has no login: it only drives your local shop. The
+admin calls the `dev-kit:*` tasks through [castor-api](https://github.com/jeromegxj/castor-api), which the project
+imports (`castor.php`) and runs on the host:
 
 ```bash
-castor up                          # the Sylius stack
+castor up                          # the Sylius stack and the dev-kit admin (https://dev-kit.<shop domain>/)
 castor api:serve-development       # castor-api, on http://127.0.0.1:8080
 ```
 
-An admin instance is a small Symfony app (AssetMapper, Tailwind) that requires the bundle, like a sales kit instance:
-see the [README of the bundle](https://github.com/opencolibri/colibri-starter/blob/main/src/DevKitBundle/README.md).
-It reads the progress of `dev-kit:apply` from `.castor/import/var/.progress/` of the project (`IMPORT_VAR_DIR`).
+The admin is served on `dev-kit.<shop domain>`: a `*.localhost` domain resolves by itself, another one (`.test`…)
+needs its line in `/etc/hosts`, like the shop. It reaches castor-api through `host.docker.internal`, which Docker
+Desktop maps to the host; on Linux, castor-api must listen where the container can reach it. `dev-kit/.env.local`
+holds its settings (secret, URLs of castor-api, of the admin and of the storefront), and `castor dev-kit:composer`,
+`castor dev-kit:symfony`… run its commands. It reads the progress of `dev-kit:apply` and the datasets from
+`.castor/import/` of the project, which its container mounts. Once the shop is launched, remove the service from
+`castor.php` and the `dev-kit/` directory.
 
 ### Your own dataset
 
