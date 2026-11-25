@@ -92,6 +92,23 @@ in one Sylius app, each on its own subdomain, and gives the sales team an admin 
 
 See [Sales kit](sales-kit/index.md) to set one up.
 
+## Dev-kit
+
+The dev-kit builds your own shop little by little, on your local Sylius app, and keeps it changeable once it runs: no
+big form to fill in before you see the site.
+
+- **The shop you want, in one file**: `starter.yaml` lists its catalog (a
+  [ready-made dataset](datasets/index.md#ready-made-datasets) or the Sylius demo data), theme and header layout, name,
+  locales, currencies and plugins.
+- **Only what changed**: `castor dev-kit:apply` compares it with the running shop and shows the plan, with what each
+  step costs, before it runs.
+- **An admin to drive it**: one page per topic, the plan of each change next to its **Apply** button, and a history to
+  go back to any earlier state.
+
+[![The storefront page of the dev-kit admin, with the plan of a header change](images/dev-kit-storefront.webp)](dev-kit/index.md)
+
+See [Dev-kit](dev-kit/index.md) to start.
+
 ## Where to go next
 
 - [Installation](getting-started/installation.md): start a new project, or add Colibri Starter to an existing one.
