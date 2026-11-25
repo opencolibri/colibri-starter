@@ -18,13 +18,16 @@ function or on a class.
 
 | Attribute                                           | Command                       | Called when                       |
 |-----------------------------------------------------|-------------------------------|-----------------------------------|
-| `#[AsPluginInstaller(name: '…', description: '…')]` | `castor sylius:add <name>`    | `sylius:add` picks the plugin     |
+| `#[AsPluginInstaller(name: '…', description: '…', package: '…')]` | `castor sylius:add <name>`    | `sylius:add` picks the plugin     |
 | `#[AsPluginRemover(name: '…', description: '…')]`   | `castor sylius:remove <name>` | `sylius:remove` picks the plugin  |
 
 `name` is the identifier you type on the command line, so keep it shell friendly: lowercase letters and underscores.
 
 The optional `description` is displayed next to the name in the interactive prompt of `sylius:add` and
 `sylius:remove`. Omit it and the plugin is listed by its name alone.
+
+The optional `package` of an installer is the Composer package the plugin requires: the [dev-kit](../dev-kit/index.md)
+reads it to tell from `composer.json` whether the plugin is installed. Omit it for a plugin that requires no package.
 
 ## Declaring a plugin
 
@@ -46,7 +49,7 @@ use OpenColibri\Starter\Core\Util\Symfony;
 
 use function Castor\io;
 
-#[AsPluginInstaller(name: 'acme_loyalty', description: 'Acme loyalty programme for Sylius')]
+#[AsPluginInstaller(name: 'acme_loyalty', description: 'Acme loyalty programme for Sylius', package: 'acme/sylius-loyalty-plugin')]
 function install_acme_loyalty(App $app): void
 {
     io()->title('Adding the Acme Loyalty plugin');
@@ -93,7 +96,7 @@ use OpenColibri\Starter\Core\Util\Docker;
 use OpenColibri\Starter\Core\Util\Symfony;
 use OpenColibri\Starter\Plugins\Attribute\AsPluginInstaller;
 
-#[AsPluginInstaller(name: 'acme_loyalty', description: 'Acme loyalty programme for Sylius')]
+#[AsPluginInstaller(name: 'acme_loyalty', description: 'Acme loyalty programme for Sylius', package: 'acme/sylius-loyalty-plugin')]
 final class AcmeLoyaltyInstaller
 {
     public function __invoke(App $app): void

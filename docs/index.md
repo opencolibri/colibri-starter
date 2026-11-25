@@ -102,6 +102,7 @@ See [Sales kit](sales-kit/index.md) to set one up.
 - [Themes](themes/index.md): every storefront theme, by category, with its screenshots, and [your own](themes/custom-themes.md).
 - [Datasets](datasets/index.md): load a ready-made catalog, or build one with AI from a description or an existing website.
 - [Storefront slots](storefront/hero.md): how themes and packages share the homepage hero and the shop logo.
+- [Dev-kit](dev-kit/index.md): build your local shop little by little from a `starter.yaml` manifest.
 - [Sales kit](sales-kit/index.md): run demo shops for your prospects, with an admin for your sales team.
 - [Contributing](contributing/monorepo.md): the monorepo, its tasks, its release process, and
   [one Docker stack per worktree](contributing/worktrees.md).

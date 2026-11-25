@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace OpenColibri\Starter\Plugins\Installer;
 
 use OpenColibri\Starter\Core\App;
-use OpenColibri\Starter\Core\Component\InstallerInterface;
 use OpenColibri\Starter\Core\Util\Assets;
 use OpenColibri\Starter\Core\Util\Composer;
 use OpenColibri\Starter\Core\Util\Database;
 use OpenColibri\Starter\Core\Util\Docker;
 use OpenColibri\Starter\Core\Util\Symfony;
 
-use function Castor\fs;
 use function Castor\io;
 
-final readonly class WishlistInstaller implements InstallerInterface
+final readonly class WishlistInstaller implements PluginInstallerInterface
 {
     public function name(): string
     {
@@ -27,11 +25,17 @@ final readonly class WishlistInstaller implements InstallerInterface
         return 'Wishlist plugin for Sylius';
     }
 
+    public function package(): string
+    {
+        return 'sylius/wishlist-plugin';
+    }
+
     public function __invoke(App $app): void
     {
         io()->title('Adding Wishlist Plugin');
 
         Composer::allowContribRecipes($app);
+        Docker::run($app, 'composer require sylius/wishlist-plugin');
         Docker::run($app, 'bin/console assets:install public');
         Docker::run($app, 'yarn install');
         Assets::build($app);

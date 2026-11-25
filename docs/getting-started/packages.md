@@ -14,8 +14,10 @@ sidebar:
 | [`opencolibri/starter-datasets`](https://github.com/opencolibri/starter-datasets) | `OpenColibri\Starter\Datasets` | [ready-made datasets](../datasets/index.md#ready-made-datasets) |
 | [`opencolibri/starter-fixtures`](https://github.com/opencolibri/starter-fixtures) | `OpenColibri\Starter\Fixtures` | [`sylius:dataset:list`, `sylius:dataset:load`](../datasets/index.md) |
 | [`opencolibri/starter-dataset-builder`](https://github.com/opencolibri/starter-dataset-builder) | `OpenColibri\Starter\DatasetBuilder` | [`sylius:dataset:build`](../datasets/build.md) (AI) |
+| [`opencolibri/starter-dev-kit`](https://github.com/opencolibri/starter-dev-kit) | `OpenColibri\Starter\DevKit` | [`dev-kit:*`](../dev-kit/index.md): build the local shop from a `starter.yaml` manifest |
 | [`opencolibri/starter-sales-kit`](https://github.com/opencolibri/starter-sales-kit) | `OpenColibri\Starter\SalesKit` | [`sylius:shop:*`](../sales-kit/shops.md): the demo shops of a sales kit |
 | [`opencolibri/starter-upsun`](https://github.com/opencolibri/starter-upsun)     | `OpenColibri\Starter\Upsun`   | [`sylius:upsun:*`](../commands/upsun.md)                              |
+| [`opencolibri/starter-dev-kit-bundle`](https://github.com/opencolibri/starter-dev-kit-bundle) | `OpenColibri\Starter\DevKitBundle` | Symfony bundle: the dev-kit admin (one card per setting of the local shop), on Sylius Shadcn Admin UI |
 | [`opencolibri/starter-sales-kit-bundle`](https://github.com/opencolibri/starter-sales-kit-bundle) | `OpenColibri\Starter\SalesKitBundle` | Symfony bundle: the sales kit admin (demo shops, datasets), on Sylius Shadcn Admin UI |
 | `opencolibri/starter`                                                      | —                       | All of the above                                                      |
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace OpenColibri\Starter\Plugins\Installer;
 
 use OpenColibri\Starter\Core\App;
-use OpenColibri\Starter\Core\Component\InstallerInterface;
 use OpenColibri\Starter\Core\Util\Composer;
 use OpenColibri\Starter\Core\Util\Docker;
 use OpenColibri\Starter\Core\Util\Symfony;
@@ -15,7 +14,7 @@ use OpenColibri\Starter\Plugins\PluginResourceCopier;
 use function Castor\fs;
 use function Castor\io;
 
-final readonly class AltchaInstaller implements InstallerInterface
+final readonly class AltchaInstaller implements PluginInstallerInterface
 {
     public function name(): string
     {
@@ -27,6 +26,11 @@ final readonly class AltchaInstaller implements InstallerInterface
         return 'Add ALTCHA (self-hosted, privacy-friendly captcha) to customer registration';
     }
 
+    public function package(): string
+    {
+        return 'tito10047/altcha-bundle';
+    }
+
     public function __invoke(App $app): void
     {
         io()->title('Adding ALTCHA plugin');
@@ -35,8 +39,11 @@ final readonly class AltchaInstaller implements InstallerInterface
         Composer::allowContribRecipes($app);
         Docker::run($app, 'composer require tito10047/altcha-bundle');
 
-        // Override the recipe config: Sylius ships StimulusBundle with Webpack Encore, but the bundle
-        // Stimulus controller is not registered in assets/controllers.json, so we load the widget script directly.
+        // Override the recipe config: we load the widget script directly instead of the bundle Stimulus controller.
+        // Since 3.x, Flex enables that controller in assets/controllers.json, and it imports the "altcha" npm package,
+        // which nothing installs: every later asset build (a theme setup...) would fail. Keep it disabled.
+        Symfony::addJsController($app, '@tito10047/altcha-bundle', 'altcha', ['enabled' => false, 'fetch' => 'eager']);
+
         fs()->dumpFile(
             $app->directory() . '/config/packages/altcha.yaml',
             <<<'YAML'
