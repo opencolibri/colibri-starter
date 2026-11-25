@@ -19,6 +19,7 @@ castor sylius:add cms invoicing refund
 
 | Plugin         | Description                                        |
 |----------------|----------------------------------------------------|
+| 2fa            | Two-factor authentication for admin and shop users |
 | ai_dev_tools   | Dev-only AI tooling for Sylius                     |
 | altcha         | ALTCHA captcha to customer registration            |
 | bugsnag        | Official BugSnag notifier for Symfony applications |
@@ -46,6 +47,7 @@ castor sylius:remove invoicing cms
 
 | Plugin       | Description                                        |
 |--------------|----------------------------------------------------|
+| 2fa          | Two-factor authentication for admin and shop users |
 | ai_dev_tools | Dev-only AI tooling for Sylius                     |
 | altcha       | ALTCHA captcha to customer registration            |
 | api          | Sylius API and its test tooling                    |
