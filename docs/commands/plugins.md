@@ -34,6 +34,34 @@ castor sylius:add cms invoicing refund
 
 These descriptions are the ones displayed next to each plugin in the interactive prompt.
 
+### Payment gateways
+
+The payment gateways are plugins too, added and removed with the same commands:
+
+```bash
+castor sylius:add stripe
+castor sylius:remove paypal
+```
+
+| Plugin | Package                        | Description                                                          |
+|--------|--------------------------------|----------------------------------------------------------------------|
+| mollie | `sylius/mollie-plugin`         | Mollie payment gateway (cards, iDEAL, Bancontact, Klarna...)         |
+| paypal | `sylius/paypal-plugin`         | PayPal payment gateway (PayPal Commerce Platform)                    |
+| stripe | `flux-se/sylius-stripe-plugin` | Stripe payment gateway (Checkout, Payment Element, express checkout) |
+
+Once a gateway is added, create its payment method in the admin (**Configuration > Payment methods**) with your
+account credentials. `castor docker:service:install sylius` also asks which payment gateways to add to the new shop.
+
+### Choosing the plugins interactively
+
+Without arguments, `sylius:add` lists every plugin with the installed ones already checked. Check the plugins you
+want: the new ones are installed. Uncheck an installed plugin to remove it: the command lists the unchecked plugins and
+asks before removing them, since their data is dropped. Plugins that are not installed are never removed, and plugins
+given on the command line are only added.
+
+To declare the exact set of plugins of a shop instead, use the [dev-kit](../dev-kit/index.md): `castor dev-kit:apply`
+only adds and removes what differs.
+
 ## Remove plugins
 
 A single command to remove the Sylius plugins you do not need anymore (`sylius:remove` is an alias of
@@ -55,7 +83,10 @@ castor sylius:remove invoicing cms
 | cms          | CMS plugin for Sylius applications                 |
 | gdpr         | Synolia sylius GDPR plugin                         |
 | invoicing    | Invoicing plugin for Sylius                        |
+| mollie       | Mollie payment gateway                             |
+| paypal       | PayPal payment gateway                             |
 | recaptcha    | Google reCAPTCHA v3 to customer registration       |
+| stripe       | Stripe payment gateway                             |
 | wishlist     | Wishlist plugin for Sylius                         |
 
 ## Your own plugins
