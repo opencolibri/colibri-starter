@@ -1,17 +1,20 @@
 ---
 title: Build a dataset
-description: Build a dataset with AI, from a description or from the catalog of an existing website.
+description: Build a dataset with AI, from a description or from the catalog of an existing website, write one by hand, or import a zip.
 sidebar:
   order: 2
 ---
 
-`opencolibri/starter-dataset-builder` builds datasets with AI, into `.castor/import/datasets/<slug>/`. A built dataset
+`opencolibri/starter-dataset-builder` builds datasets with AI, or [by hand](#by-hand) and [from a zip](#import-a-zip),
+into `.castor/import/datasets/<slug>/`. A built dataset
 is final: loading it ([`sylius:dataset:load`](index.md#load-a-dataset), or a [demo shop](../sales-kit/shops.md)) needs
 neither the AI nor the source website.
 
 ## Configure the AI
 
-Set the AI in the `.env.local` of the project root (or `.env`):
+Set the AI in `.castor/.env.local` (ignored by git), over the defaults of `.castor/.env` (see `.castor/.env.example`).
+The `.env` and `.env.local` of the project root are read too. `.castor/.env` picks Ollama (`qwen2.5:latest`, images
+with `x/flux2-klein`); without it, the defaults below apply:
 
 | Variable         | Default                  | Description                            |
 |------------------|--------------------------|----------------------------------------|
@@ -65,6 +68,42 @@ castor sylius:dataset:delete tea-house   # built datasets only: catalogs loaded 
 ```
 
 The dataset slug is the slug of the name, or `--dataset`. A built-in dataset cannot be built or deleted.
+
+## By hand
+
+Write a catalog without AI: create an empty dataset, then add its collections and its products, each with its image.
+The [dev-kit admin](../dev-kit/index.md#your-own-dataset) does it from forms; the tasks do it from the command line:
+
+```bash
+castor sylius:dataset:create --name="Tea House" --description="Loose leaf teas" --theme=teahouse
+castor sylius:dataset:collection tea-house --name=Green
+castor sylius:dataset:collection tea-house --name=Sencha --parent=Green          # shown under Green
+castor sylius:dataset:product tea-house --title="Gyokuro" --collection=Sencha --price=24.5 --image=gyokuro.jpg
+castor sylius:dataset:product tea-house --index=0 --expected="Gyokuro" --price=22  # change the first product
+castor sylius:dataset:product tea-house --index=0 --remove
+castor sylius:dataset:update tea-house --name="Tea Garden"                      # name, description, theme
+```
+
+- `--index` is the position of the product or collection in its YAML file (from 0); without it, one is added.
+  `--expected` (its current title or name) refuses the change when the file changed in between.
+- `--image` is a file of `.castor/import/var/.uploads/` (where the admin puts its uploads), converted to WebP into
+  `media/` and removed afterwards. The image it replaces is removed.
+- Renaming a collection moves its products and sub-collections along. Removing one keeps its products, without a
+  collection. The menu has two levels: a parent is a top-level collection.
+- Any dataset built here can be changed this way, not a ready-made one: export it and import the zip under another
+  name to change a copy.
+- A dataset already loaded into the shop gets the changes once loaded again (`castor sylius:dataset:load <slug>`).
+
+## Import a zip
+
+```bash
+castor sylius:dataset:import ~/Downloads/cellar.zip --dataset=my-cellar
+castor sylius:dataset:import tea.zip --replace      # replaces the dataset of the same slug built here
+```
+
+The zip holds `products.yaml`, and optionally `dataset.yaml`, `collections.yaml` and `media/`, at its root or in a single
+directory: the layout of an [exported dataset](#export-a-dataset). Other files are ignored. The slug is `--dataset`,
+the directory of the zip, or the slug of the name of `dataset.yaml`; a ready-made slug is refused.
 
 ## Export a dataset
 
