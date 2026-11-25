@@ -60,7 +60,9 @@ product and collection pages, and uses the AI to extract the collections. The AI
 2. A fetched catalog is curated by the AI (above).
 3. When more than eight collections hold products, the AI groups them into a two-level menu (e.g. Men > T-shirts).
 4. `dataset.yaml` records the name, description, URL and source.
-5. The image of every product and collection is downloaded or generated into `media/`.
+5. The image of every product and collection is downloaded or generated into `media/`. With `--skip-images`, the
+   products keep their image URL or prompt instead: add the images by hand, or store them later with
+   `sylius:dataset:images`.
 
 ```bash
 castor sylius:dataset:images tea-house   # store the images still missing (after a failed download, for example)

@@ -49,7 +49,8 @@ The **Catalog** page searches the datasets as you type, and its **New dataset** 
 - **Import a zip**, without AI: a dataset downloaded from a sales kit or exported with `castor sylius:dataset:export`, or written
   in the [same layout](../datasets/index.md#the-format).
 
-The AI builds take a few minutes: they run in the tasks panel, and the page shows the new dataset once they finish.
+Uncheck **Generate the images** (or **Download the images**) to add them by hand from the product form, or to store
+them later with **Generate the missing images** (or **Download**) on the page of the dataset. The AI builds take a few minutes: they run in the tasks panel, and the page shows the new dataset once they finish.
 They need the AI settings of the project ([Configure the AI](../datasets/build.md#configure-the-ai)). The page of a
 dataset built in the project, whatever way, edits it: its name, description and theme, its collections, its products
 (click one to change it), its deletion. Once it is loaded, **Load it again** brings its changes into the shop
