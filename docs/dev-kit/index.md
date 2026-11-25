@@ -20,7 +20,7 @@ setting, apply, look at the result, go on.
 `opencolibri/starter-dev-kit-bundle` is a Symfony bundle, duplicated from the [sales kit](../sales-kit/index.md) admin
 but for one shop, the one you build. Its dashboard sums up what the shop runs now, and one page per topic holds the
 cards: **Storefront** (the theme, picked on its thumbnails, and the header layout, picked on a wireframe of the
-header), **Catalog** (open a dataset to see its products by collection, then load it), **Locales and currencies**, **Plugins** (searched as you type) and **Shop** (its name). A package
+header), **Catalog** (open a dataset to see its products by collection, then load it, or [make your own](#your-own-dataset)), **Locales and currencies**, **Plugins** (searched as you type) and **Shop** (its name). A package
 or an instance adds its own pages (`opencolibri_dev_kit.pages`, see the README of the bundle). Change a card: the plan of `dev-kit:apply` shows up with the cost of each step, and
 **Apply** runs it. The run is followed in the tasks panel, step by step, and the page reloads once it finishes. The
 history lists every state an apply brought the shop to, and plans the way back to any of them.
@@ -36,6 +36,27 @@ castor api:serve-development       # castor-api, on http://127.0.0.1:8080
 An admin instance is a small Symfony app (AssetMapper, Tailwind) that requires the bundle, like a sales kit instance:
 see the [README of the bundle](https://github.com/opencolibri/colibri-starter/blob/main/src/DevKitBundle/README.md).
 It reads the progress of `dev-kit:apply` from `.castor/import/var/.progress/` of the project (`IMPORT_VAR_DIR`).
+
+### Your own dataset
+
+The **Catalog** page searches the datasets as you type, and its **New dataset** menu makes one of your own:
+
+- **Create with AI**: the AI writes a catalog from a description, then generates its images;
+- **Import a website**: the catalog of a website you own is fetched, curated by the AI, and its images downloaded
+  (see the [caution about scraping](../datasets/build.md#from-an-existing-website));
+- **Write one by hand**, without AI: an empty dataset (name, description, suggested theme), then its collections (a two-level
+  menu at most) and its products, each with its image (converted to WebP), price and description;
+- **Import a zip**, without AI: a dataset downloaded from a sales kit or exported with `castor sylius:dataset:export`, or written
+  in the [same layout](../datasets/index.md#the-format).
+
+The AI builds take a few minutes: they run in the tasks panel, and the page shows the new dataset once they finish.
+They need the AI settings of the project ([Configure the AI](../datasets/build.md#configure-the-ai)). The page of a
+dataset built in the project, whatever way, edits it: its name, description and theme, its collections, its products
+(click one to change it), its deletion. Once it is loaded, **Load it again** brings its changes into the shop
+(`dev-kit:apply` only compares the slug of the dataset). The ready-made datasets are read only: import their zip under
+another name to change a copy. The admin hands the images and zips over to the
+[dataset tasks](../datasets/build.md#by-hand) through `.castor/import/var/.uploads/`: they come with
+`opencolibri/starter-dataset-builder`, which the project needs for these pages (this repository has it).
 
 ## Get started
 
