@@ -1,6 +1,6 @@
 {
     "require": {
-        "castor-php/docker": "^0.10",
+        "castor-php/docker": "^0.11",
         "castor-php/php-qa": "^0.3.0",
         "opencolibri/starter": "@dev",
         "nikic/php-parser": "^5.8",
