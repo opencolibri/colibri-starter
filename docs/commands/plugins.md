@@ -50,7 +50,9 @@ castor sylius:remove paypal
 | stripe | `flux-se/sylius-stripe-plugin` | Stripe payment gateway (Checkout, Payment Element, express checkout) |
 
 Once a gateway is added, create its payment method in the admin (**Configuration > Payment methods**) with your
-account credentials. `castor docker:service:install sylius` also asks which payment gateways to add to the new shop.
+account credentials. `castor docker:service:install sylius` also asks which payment gateways the new shop should have
+(all of them by default): Sylius-Standard 2.3+ already requires Stripe, Mollie and PayPal, so the ones you do not pick
+are removed with `sylius:remove`, and the picked ones it lacks are added with `sylius:add`.
 
 ### Choosing the plugins interactively
 
