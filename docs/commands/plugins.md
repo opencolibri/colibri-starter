@@ -17,26 +17,12 @@ castor sylius:add cms invoicing refund
 
 ![Adding multiple Sylius plugins with the sylius add command](../images/sylius-add-plugins.svg)
 
-| Plugin         | Description                                        |
-|----------------|----------------------------------------------------|
-| 2fa            | Two-factor authentication for admin and shop users |
-| ai_dev_tools   | Dev-only AI tooling for Sylius                     |
-| altcha         | ALTCHA captcha to customer registration            |
-| bugsnag        | Official BugSnag notifier for Symfony applications |
-| cms            | CMS plugin for Sylius applications                 |
-| gdpr           | Synolia sylius GDPR plugin                         |
-| invoicing      | Invoicing plugin for Sylius                        |
-| media          | Media management bundle for Symfony applications   |
-| product_bundle | Product bundle for Sylius                          |
-| refund         | Basic refunds functionality for Sylius             |
-| recaptcha      | Google reCAPTCHA v3 to customer registration       |
-| wishlist       | Wishlist plugin for Sylius                         |
-
-These descriptions are the ones displayed next to each plugin in the interactive prompt.
+The plugins come by category, the ones the [dev-kit](../dev-kit/index.md) **Plugins** page groups and filters them by.
+Their descriptions are the ones displayed next to each plugin in the interactive prompt.
 
 ### Payment gateways
 
-The payment gateways are plugins too, added and removed with the same commands:
+Added and removed with the same commands:
 
 ```bash
 castor sylius:add stripe
@@ -53,6 +39,46 @@ Once a gateway is added, create its payment method in the admin (**Configuration
 account credentials. `castor docker:service:install sylius` also asks which payment gateways the new shop should have
 (all of them by default): Sylius-Standard 2.3+ already requires Stripe, Mollie and PayPal, so the ones you do not pick
 are removed with `sylius:remove`, and the picked ones it lacks are added with `sylius:add`.
+
+### Security and privacy
+
+Protect the accounts and the forms, and handle personal data.
+
+| Plugin    | Description                                        |
+|-----------|----------------------------------------------------|
+| 2fa       | Two-factor authentication for admin and shop users |
+| altcha    | ALTCHA captcha to customer registration            |
+| gdpr      | Synolia sylius GDPR plugin                         |
+| recaptcha | Google reCAPTCHA v3 to customer registration       |
+
+### Catalog and content
+
+Pages, media and product bundles around the catalog.
+
+| Plugin         | Description                                      |
+|----------------|--------------------------------------------------|
+| cms            | CMS plugin for Sylius applications               |
+| media          | Media management bundle for Symfony applications |
+| product_bundle | Product bundle for Sylius                        |
+
+### Orders and customers
+
+What happens after the checkout, and what customers keep.
+
+| Plugin    | Description                            |
+|-----------|----------------------------------------|
+| invoicing | Invoicing plugin for Sylius            |
+| refund    | Basic refunds functionality for Sylius |
+| wishlist  | Wishlist plugin for Sylius             |
+
+### Developer tools
+
+Tooling and monitoring for the people who build the shop.
+
+| Plugin       | Description                                        |
+|--------------|----------------------------------------------------|
+| ai_dev_tools | Dev-only AI tooling for Sylius                     |
+| bugsnag      | Official BugSnag notifier for Symfony applications |
 
 ### Choosing the plugins interactively
 

@@ -30,9 +30,11 @@ The optional `package` of an installer is the Composer package the plugin requir
 reads it to tell from `composer.json` whether the plugin is installed, and the interactive prompt of `sylius:add` checks
 the installed plugins. Omit it for a plugin that requires no package.
 
-The optional `group` of an installer puts the plugin in a family: with `GroupedPluginInstallerInterface::PAYMENT`
-(`'payment'`), your payment gateway is offered next to Stripe, Mollie and PayPal when `castor docker:service:install
-sylius` asks which payment gateways to add. A class implements `GroupedPluginInstallerInterface` for the same result.
+The optional `group` of an installer is the category of the plugin, the one the [dev-kit](../dev-kit/index.md) groups
+and filters the plugins by: `GroupedPluginInstallerInterface::PAYMENT` (`'payment'`), `SECURITY`, `CATALOG`, `ORDERS`
+or `DEVELOPER` (see `PluginCategory`), or a name of your own, shown as its own category. A payment gateway
+(`PAYMENT`) is also offered next to Stripe, Mollie and PayPal when `castor docker:service:install sylius` asks which
+payment gateways to add. A class implements `GroupedPluginInstallerInterface` for the same result.
 
 ## Declaring a plugin
 
