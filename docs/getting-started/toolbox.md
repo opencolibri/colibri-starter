@@ -35,7 +35,10 @@ as their first argument:
 | `Composer::removeDevDependency($app, $package)`                  | Removes a `require-dev` dependency                     |
 | `Database::migrate($app)`                                        | Runs the Doctrine migrations                           |
 | `Database::diff($app, $namespace)`                               | Generates a migration diff                             |
-| `Database::rollbackPluginMigrations($app, $namespace)`           | Rolls back the migrations of a plugin namespace        |
+| `Database::mappedSchema($app)`                                   | Snapshots the Doctrine mapping, before a plugin is added or removed |
+| `Database::generatePluginMigration($app, $description, $schema, $forgottenMigrations)` | Generates the migration of the tables the plugin changed since the snapshot (see [Plugin migrations](../commands/plugins.md#plugin-migrations)) |
+| `Database::pluginMigrations($app, $namespace)`                   | Lists the migrations a plugin ships, to forget them on removal |
+| `Database::rollbackPluginMigrations($app, $namespace)`           | Rolls back the migrations of a plugin namespace (local only: prefer a removal migration) |
 | `Assets::install($app)` / `Assets::build($app)`                  | Installs the JS dependencies / builds the front assets |
 | `Symfony::addBundle($app, $bundle, $envs)`                       | Registers a bundle in `config/bundles.php`             |
 | `Symfony::addJsController($app, $package, $controller, $config)` | Registers a JS controller                              |
