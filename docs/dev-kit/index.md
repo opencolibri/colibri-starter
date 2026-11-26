@@ -19,8 +19,9 @@ setting, apply, look at the result, go on.
 
 `opencolibri/starter-dev-kit-bundle` is a Symfony bundle, duplicated from the [sales kit](../sales-kit/index.md) admin
 but for one shop, the one you build. Its dashboard sums up what the shop runs now, and one page per topic holds the
-cards: **Storefront** (the theme, picked on its thumbnails, and the header layout, picked on a wireframe of the
-header), **Catalog** (open a dataset to see its products by collection, then load it, or [make your own](#your-own-dataset)), **Locales and currencies**, **Plugins** (searched as you type) and **Shop** (its name). A package
+cards: **Storefront** (the theme, picked on its thumbnails grouped and filtered by the categories of the
+[theme list](../themes/index.md), and in the sidebar the header layout of the picked theme, on a wireframe of the
+header: both apply together), **Catalog** (open a dataset to see its products by collection, then load it, or [make your own](#your-own-dataset)), **Locales and currencies**, **Plugins** (searched as you type, what to install and remove listed in the sidebar) and **Shop** (its name). A package
 or an instance adds its own pages (`opencolibri_dev_kit.pages`, see the README of the bundle). Change a card: the plan of `dev-kit:apply` shows up with the cost of each step, and
 **Apply** runs it. The run is followed in the tasks panel, step by step, and the page reloads once it finishes. The
 history lists every state an apply brought the shop to, and plans the way back to any of them.
