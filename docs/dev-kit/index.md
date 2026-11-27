@@ -12,7 +12,7 @@ setting, apply, look at the result, go on.
 
 | Package                              | What it brings                                                                 |
 |--------------------------------------|--------------------------------------------------------------------------------|
-| `opencolibri/starter-dev-kit`        | `dev-kit:status`, `dev-kit:init`, `dev-kit:apply`, `dev-kit:channel`, `dev-kit:history`, `dev-kit:catalog` |
+| `opencolibri/starter-dev-kit`        | `dev-kit:status`, `dev-kit:init`, `dev-kit:apply`, `dev-kit:tui`, `dev-kit:channel`, `dev-kit:history`, `dev-kit:catalog` |
 | `opencolibri/starter-dev-kit-bundle` | The admin: one card per setting, each showing its plan before it runs (Sylius Shadcn Admin UI) |
 
 ## The admin
@@ -93,6 +93,35 @@ plugins: [refund, altcha]    # the plugins of `castor sylius:plugin:add`
 
 Leave a setting out to leave it as it is: the dev-kit manages only what the manifest lists. An empty `plugins: []`
 does manage the plugins, and removes them all.
+
+## In the terminal
+
+`castor dev-kit:tui` edits `starter.yaml` without the admin: no service, no castor-api. It takes the whole terminal:
+
+![The overview of the dev-kit TUI, with the plan next to it](../images/dev-kit-tui-overview.webp)
+
+- **1 Overview**: a card per setting, with what the shop runs now and, when the manifest changes it, the new value.
+  **Enter** on a card changes it: the name, the languages and the currencies are edited in place (**d** picks the
+  default language), the other cards open their view.
+- **2 Theme**: the themes as cards, a column per category. **Enter** picks one (its header placements follow), **m**
+  and **f** change where its header shows the menu and the search.
+- **3 Catalog**: the Sylius demo data, the ready-made datasets and yours. **Enter** picks one.
+- **4 Plugins**: the plugins by category. **Space** adds or removes one.
+
+| Themes | Catalogs | Plugins |
+|---|---|---|
+| ![The themes by category](../images/dev-kit-tui-theme.webp) | ![The catalogs](../images/dev-kit-tui-catalog.webp) | ![The plugins by category](../images/dev-kit-tui-plugins.webp) |
+
+Next to the view, the plan of `dev-kit:apply` follows every change, with the cost of each step (**p** hides it; on a
+narrow terminal, it is the **5 Plan** view). **s** saves the manifest, **a** saves it and runs `dev-kit:apply` (press
+it twice when a step deletes data), **q** quits (twice with unsaved changes). A setting shown as `—` is not managed.
+
+`--snapshot=<file.html>` writes the screen as HTML instead (`--size=160x44`, `--keys=2,down,enter` to press keys
+first), to check the layout without a terminal.
+
+It is a prototype built on [symfony/tui](https://symfony.com/doc/current/tui.html), which Castor bundles: the component
+is experimental, so it may change with the next Castor version. It leaves out what the admin does with pictures
+(theme thumbnails, dataset previews) and the dataset editor.
 
 ## What each change costs
 
