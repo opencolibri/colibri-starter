@@ -193,6 +193,16 @@ Datasets: the format (`Core\Dataset\Dataset`) is the contract between `starter-d
 `starter-sales-kit` (demo shops, `sylius:shop:*`). A built dataset is final: never call an AI or the network
 from `starter-fixtures`. See `docs/datasets/index.md`.
 
+## Plugin installers and removers
+
+Never change the schema with hand-written SQL (`ALTER TABLE`, `DROP COLUMN`…), nor branch on the database platform for
+it, in a plugin installer or remover: reuse the migration logic of `Core\Util\Database` and `Plugins\PluginRemoval`.
+An installer whose plugin ships no migration takes `Database::mappedSchema()` before the plugin and generates its
+migration with `Database::generatePluginMigration()`; a remover starts with `PluginRemoval::start()` (with the
+namespace of the migrations the plugin ships) and ends with `$removal->finish()`. When the plugin migrations cannot be
+rolled back on every platform (a `down()` written for MySQL only), pass `rollbackWithDiff: true`. See
+`docs/commands/plugins.md` (Plugin migrations).
+
 ## Dev-kit
 
 `starter.yaml` (ignored by git in this repository) holds the wanted state of the local shop: `castor dev-kit:apply`
