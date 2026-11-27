@@ -74,11 +74,16 @@ function remove_acme_loyalty(App $app): void
 {
     io()->title('Removing the Acme Loyalty plugin');
 
+    $schema = Database::mappedSchema($app);
+    $migrations = Database::pluginMigrations($app, 'Acme\SyliusLoyaltyPlugin\Migrations');
+
     Composer::allowContribRecipes($app);
-    Database::rollbackPluginMigrations($app, 'Acme\SyliusLoyaltyPlugin\Migrations');
     Docker::run($app, 'composer remove acme/sylius-loyalty-plugin');
     Assets::build($app);
     Symfony::cacheClear($app);
+    // A migration dropping its tables, which the environments where the plugin was deployed run too.
+    Database::generatePluginMigration($app, 'Remove the Acme Loyalty plugin', $schema, $migrations);
+    Database::migrate($app);
 }
 ```
 

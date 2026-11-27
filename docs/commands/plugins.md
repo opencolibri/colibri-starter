@@ -53,13 +53,22 @@ Protect the accounts and the forms, and handle personal data.
 
 ### Catalog and content
 
-Pages, media and product bundles around the catalog.
+Pages, media, SEO and product bundles around the catalog.
 
-| Plugin         | Description                                      |
-|----------------|--------------------------------------------------|
-| cms            | CMS plugin for Sylius applications               |
-| media          | Media management bundle for Symfony applications |
-| product_bundle | Product bundle for Sylius                        |
+| Plugin         | Description                                                    |
+|----------------|----------------------------------------------------------------|
+| cms            | CMS plugin for Sylius applications                             |
+| media          | Media management bundle for Symfony applications               |
+| product_bundle | Product bundle for Sylius                                      |
+| seo            | Dedi SEO: metadata, OpenGraph, noindex rules and rich snippets |
+
+`seo` installs `dedi/sylius-seo-plugin`: metadata and OpenGraph for the channels, products, taxons and any shop URL
+(**Marketing > SEO**), noindex rules, canonical and hreflang links, breadcrumb and product rich snippets, and Google
+Analytics or Tag Manager per channel. It wires its interfaces and traits onto the `Product`, `ProductVariant`, `Taxon`
+and `Channel` entities (the product and taxon descriptions and the first product image are the default metadata),
+migrates its tables and columns, and overrides the shop layout
+(`templates/bundles/SyliusShopBundle/shared/layout/base.html.twig`) for the SEO title: pages keep their own title when
+no SEO content gives one.
 
 ### Orders and customers
 
@@ -114,8 +123,21 @@ castor sylius:remove invoicing cms
 | mollie       | Mollie payment gateway                             |
 | paypal       | PayPal payment gateway                             |
 | recaptcha    | Google reCAPTCHA v3 to customer registration       |
+| seo          | Remove the Dedi SEO plugin and its SEO contents    |
 | stripe       | Stripe payment gateway                             |
 | wishlist     | Wishlist plugin for Sylius                         |
+
+## Plugin migrations
+
+The plugins never roll back a migration: a migration that ran in production cannot be taken back by deleting it.
+Commit the migrations they generate in the `migrations/` folder of the shop, so every environment follows.
+
+- Plugins that add tables or columns without shipping migrations (`2fa`, `media`, `seo`) generate theirs on install,
+  with `doctrine:migrations:diff` restricted to the tables they change: it follows the installed plugin version and
+  the database platform, and the schema drift of the other tables stays out of it.
+- `sylius:remove` generates a migration that drops the tables and columns of the plugin, whether it shipped its
+  migrations or not. It forgets the migrations the plugin shipped, so a reinstall runs them again, and it is skipped
+  where none of these tables and columns exist (a plugin removed before it was deployed there).
 
 ## Your own plugins
 
