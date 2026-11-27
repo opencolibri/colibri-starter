@@ -104,8 +104,12 @@ big form to fill in before you see the site.
   step costs, before it runs.
 - **An admin to drive it**: one page per topic, the plan of each change next to its **Apply** button, and a history to
   go back to any earlier state.
+- **Or the terminal**: `castor dev-kit:tui` edits `starter.yaml` without the admin, a card per setting and the plan
+  next to it, updated on every change.
 
-[![The storefront page of the dev-kit admin, with the plan of a header change](images/dev-kit-storefront.webp)](dev-kit/index.md)
+| Admin | Terminal |
+|---|---|
+| [![The storefront page of the dev-kit admin, with the plan of a header change](images/dev-kit-storefront.webp)](dev-kit/index.md) | [![The overview of the dev-kit TUI, with the plan next to it](images/dev-kit-tui-overview.webp)](dev-kit/index.md#in-the-terminal) |
 
 See [Dev-kit](dev-kit/index.md) to start.
 
