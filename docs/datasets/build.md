@@ -18,11 +18,14 @@ with `x/flux2-klein`); without it, the defaults below apply:
 
 | Variable         | Default                  | Description                            |
 |------------------|--------------------------|----------------------------------------|
-| `AI_PROVIDER`    | `openrouter`             | `ollama` (local) or `openrouter`       |
+| `AI_PROVIDER`    | `openrouter`             | `ollama` (local), `openrouter` or `mistral` |
 | `AI_MODEL`       | provider-specific        | Text / structured-output model         |
 | `AI_IMAGE_MODEL` | provider-specific        | Image generation model                 |
-| `AI_BASE_URL`    | `http://127.0.0.1:11434` | Ollama URL (ignored for OpenRouter)    |
-| `AI_API_KEY`     | —                        | Required when `AI_PROVIDER=openrouter` |
+| `AI_BASE_URL`    | `http://127.0.0.1:11434` | Ollama URL (ignored for OpenRouter and Mistral) |
+| `AI_API_KEY`     | —                        | Required when `AI_PROVIDER` is `openrouter` or `mistral` |
+
+With `AI_PROVIDER=mistral` (default text model `mistral-small-latest`), Mistral also generates the images, through its built-in
+image generation tool (no agent needed; `AI_IMAGE_MODEL`, default `mistral-medium-latest`).
 
 ## From a description
 

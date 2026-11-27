@@ -1,5 +1,6 @@
 {
     "require": {
+        "symfony/ai-mistral-platform": "^0.12.0",
         "symfony/ai-ollama-platform": "^0.12.0",
         "symfony/ai-platform": "^0.12.0",
         "symfony/ai-open-router-platform": "^0.12.0",
