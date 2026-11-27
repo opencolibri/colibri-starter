@@ -38,7 +38,10 @@ as their first argument:
 | `Database::mappedSchema($app)`                                   | Snapshots the Doctrine mapping, before a plugin is added or removed |
 | `Database::generatePluginMigration($app, $description, $schema, $forgottenMigrations)` | Generates the migration of the tables the plugin changed since the snapshot (see [Plugin migrations](../commands/plugins.md#plugin-migrations)) |
 | `Database::pluginMigrations($app, $namespace)`                   | Lists the migrations a plugin ships, to forget them on removal |
-| `Database::rollbackPluginMigrations($app, $namespace)`           | Rolls back the migrations of a plugin namespace (local only: prefer a removal migration) |
+| `Database::rollbackPluginMigrations($app, $namespace)`           | Rolls back the migrations of a plugin namespace (local only: prefer `PluginRemoval`) |
+| `Database::generatedMigrations($app, $descriptions)` / `Database::discardGeneratedMigrations($app, $paths)` | Finds the migrations generated for a plugin / rolls them back and deletes them |
+| `Git::committedFile($app, $path)`                                | A file of the application as of its last commit (`null` outside a git repository) |
+| `PluginRemoval::start($app, $label, $package, $namespace)` / `->finish($app)` | Removes the database part of a plugin: rolled back if never committed, a migration otherwise (see [Plugin migrations](../commands/plugins.md#plugin-migrations)) |
 | `Assets::install($app)` / `Assets::build($app)`                  | Installs the JS dependencies / builds the front assets |
 | `Symfony::addBundle($app, $bundle, $envs)`                       | Registers a bundle in `config/bundles.php`             |
 | `Symfony::addJsController($app, $package, $controller, $config)` | Registers a JS controller                              |
