@@ -61,6 +61,7 @@ Pages, media, SEO and product bundles around the catalog.
 | media          | Media management bundle for Symfony applications               |
 | product_bundle | Product bundle for Sylius                                      |
 | seo            | Dedi SEO: metadata, OpenGraph, noindex rules and rich snippets |
+| sitemap        | XML sitemap of the products, taxons and static pages           |
 
 `seo` installs `dedi/sylius-seo-plugin`: metadata and OpenGraph for the channels, products, taxons and any shop URL
 (**Marketing > SEO**), noindex rules, canonical and hreflang links, breadcrumb and product rich snippets, and Google
@@ -69,6 +70,14 @@ and `Channel` entities (the product and taxon descriptions and the first product
 migrates its tables and columns, and overrides the shop layout
 (`templates/bundles/SyliusShopBundle/shared/layout/base.html.twig`) for the SEO title: pages keep their own title when
 no SEO content gives one.
+
+`sitemap` installs `stefandoorn/sitemap-plugin`: `/sitemap.xml` redirects to `/sitemap_index.xml`, which links one
+sitemap per provider (products and taxons with their hreflang alternates and images, the homepage and the contact
+page). It adds no table: its contrib recipe registers the bundle and imports its config and routes. The sitemaps are
+files, generated per channel in `var/sitemap` by the install, then by `bin/console sylius:sitemap:generate`: run it on
+a schedule (once a day, say) in production, so new products show up. Their URLs take the channel hostname, and the
+scheme of `DEFAULT_URI` (`http://localhost` in `.env`): set it to your `https://` URL in production, or the sitemaps
+list `http://` URLs. `sylius:remove sitemap` also deletes the generated files.
 
 ### Orders and customers
 
@@ -110,22 +119,23 @@ castor sylius:remove invoicing cms
 
 ![Removing multiple Sylius plugins with the sylius remove command](../images/sylius-remove-plugins.svg)
 
-| Plugin       | Description                                        |
-|--------------|----------------------------------------------------|
-| 2fa          | Two-factor authentication for admin and shop users |
-| ai_dev_tools | Dev-only AI tooling for Sylius                     |
-| altcha       | ALTCHA captcha to customer registration            |
-| api          | Sylius API and its test tooling                    |
-| bugsnag      | Official BugSnag notifier for Symfony applications |
-| cms          | CMS plugin for Sylius applications                 |
-| gdpr         | Synolia sylius GDPR plugin                         |
-| invoicing    | Invoicing plugin for Sylius                        |
-| mollie       | Mollie payment gateway                             |
-| paypal       | PayPal payment gateway                             |
-| recaptcha    | Google reCAPTCHA v3 to customer registration       |
-| seo          | Remove the Dedi SEO plugin and its SEO contents    |
-| stripe       | Stripe payment gateway                             |
-| wishlist     | Wishlist plugin for Sylius                         |
+| Plugin       | Description                                          |
+|--------------|------------------------------------------------------|
+| 2fa          | Two-factor authentication for admin and shop users   |
+| ai_dev_tools | Dev-only AI tooling for Sylius                       |
+| altcha       | ALTCHA captcha to customer registration              |
+| api          | Sylius API and its test tooling                      |
+| bugsnag      | Official BugSnag notifier for Symfony applications   |
+| cms          | CMS plugin for Sylius applications                   |
+| gdpr         | Synolia sylius GDPR plugin                           |
+| invoicing    | Invoicing plugin for Sylius                          |
+| mollie       | Mollie payment gateway                               |
+| paypal       | PayPal payment gateway                               |
+| recaptcha    | Google reCAPTCHA v3 to customer registration         |
+| seo          | Remove the Dedi SEO plugin and its SEO contents      |
+| sitemap      | Remove the sitemap plugin and its generated sitemaps |
+| stripe       | Stripe payment gateway                               |
+| wishlist     | Wishlist plugin for Sylius                           |
 
 ## Plugin migrations
 
