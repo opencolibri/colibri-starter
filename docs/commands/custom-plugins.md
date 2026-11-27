@@ -48,6 +48,7 @@ The most direct option, and a good fit for a plugin living in your `castor.php`:
 use OpenColibri\Starter\Core\App;
 use OpenColibri\Starter\Plugins\Attribute\AsPluginInstaller;
 use OpenColibri\Starter\Plugins\Attribute\AsPluginRemover;
+use OpenColibri\Starter\Plugins\PluginRemoval;
 use OpenColibri\Starter\Core\Util\Assets;
 use OpenColibri\Starter\Core\Util\Composer;
 use OpenColibri\Starter\Core\Util\Database;
@@ -74,16 +75,14 @@ function remove_acme_loyalty(App $app): void
 {
     io()->title('Removing the Acme Loyalty plugin');
 
-    $schema = Database::mappedSchema($app);
-    $migrations = Database::pluginMigrations($app, 'Acme\SyliusLoyaltyPlugin\Migrations');
+    // Rolls back a plugin never committed, or prepares a migration dropping its tables (see Plugin migrations).
+    $removal = PluginRemoval::start($app, 'Acme Loyalty', 'acme/sylius-loyalty-plugin', 'Acme\SyliusLoyaltyPlugin\Migrations');
 
     Composer::allowContribRecipes($app);
     Docker::run($app, 'composer remove acme/sylius-loyalty-plugin');
     Assets::build($app);
     Symfony::cacheClear($app);
-    // A migration dropping its tables, which the environments where the plugin was deployed run too.
-    Database::generatePluginMigration($app, 'Remove the Acme Loyalty plugin', $schema, $migrations);
-    Database::migrate($app);
+    $removal->finish($app);
 }
 ```
 
