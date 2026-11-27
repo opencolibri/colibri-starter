@@ -33,7 +33,7 @@ mounts the `.castor/import/var`, `.castor/import/exports` and `.castor/import/da
 last one read only).
 
 ```bash
-composer require opencolibri/starter-sales-kit-bundle:^0.1@dev sylius/shadcn-admin-ui:^0.14@dev
+composer require opencolibri/starter-sales-kit-bundle:^0.1@dev sylius/shadcn-admin-ui:^0.15
 ```
 
 The [README of opencolibri/starter-sales-kit-bundle](https://github.com/opencolibri/colibri-starter/blob/main/src/SalesKitBundle/README.md)
